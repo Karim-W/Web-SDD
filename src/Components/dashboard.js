@@ -1,65 +1,15 @@
 import React,{useEffect,useState} from 'react'
-import HomeIcon from "@material-ui/icons/Home";
-import ReceiptIcon from "@material-ui/icons/Receipt";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import DesktopWindowsIcon from "@material-ui/icons/DesktopWindows";
-import SettingsIcon from "@material-ui/icons/Settings";
-import Sidebar from "./sidebar";
-import logo from './Assets/Images/AppLogo.jpg'
 import AppLogoBW from './Assets/Images/AppLogoBW.jpg'
 import "bootstrap/dist/css/bootstrap.min.css"
 import firebase from '../firebase'
 import {useAuth} from '../contexts/AuthContext'
-import { Card} from 'react-bootstrap'
-// import '../node_modules/react-vis/dist/style.css';
-import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries} from 'react-vis';
-
-
-function onClick(e, item) {
-  window.alert(JSON.stringify(item, null, 2));
-}
-
-const items = [
-    { name: 'home', label: 'Dashboard' },
-    {
-      name: 'loc',
-      label: 'Paired Locations',
-      items: [
-      ],
-    },
-    {
-      name: 'devices',
-      label: 'Devices',
-      items: [{
-        name: 'settings',
-        label: 'Settings',}
-      ],
-    },
-    {
-        name: 'settings',
-        label: 'Settings',
-        items: [
-        ],
-      },
-  ]
-  
-
-  const data = [
-    {x: 0, y: 8},
-    {x: 1, y: 5},
-    {x: 2, y: 4},
-    {x: 3, y: 9},
-    {x: 4, y: 1},
-    {x: 5, y: 7},
-    {x: 6, y: 6},
-    {x: 7, y: 3},
-    {x: 8, y: 2},
-    {x: 9, y: 0}
-  ];
-  
+import { Dropdown,Spinner,Row,Col,Container,Accordion,Card} from 'react-bootstrap'
+import MainGraph from './maingraph' 
 
 export default function Dashboard() {
     const [fname,setFname] = useState()
+    const [lname,setLname] = useState()
+    const [locs,setLocs] = useState()
     const {currentUser} = useAuth()
     useEffect(() => {
         const DBref = firebase.database().ref().child("users").child(currentUser.uid)
@@ -67,53 +17,76 @@ export default function Dashboard() {
             var myUser = (snapshot.val())
             var locs = myUser.pairedLocations
             setFname(myUser.First_Name)
+            setLname(myUser.Last_Name)
             console.log(Object.keys(locs).length)
             console.log(fname)
+            setLocs(locs)
+            console.log(locs)
         })
     }, [])
-
-    console.log("Ayo")
+    
     return (
         <>
-        <div class="row">
-            <div class="column">
-                <div style={{display:"flex",maxWidth:"10vw"}}>
-                    <div>
-                        <div style={{backgroundColor:"Black",paddingTop:"20px"}}>
-                            <img src={AppLogoBW} style={{width:"6vw",paddingBottom:"50px",display:"flex",marginLeft:"auto",marginRight:"auto"}}></img>
-                        </div> 
-                            <Sidebar items={items}/>
-                            <div style={{backgroundColor:"black",height:"100vh"}}> hi
-                            </div>
-                    </div>
-                    
-                </div>
+        <Container style={{marginLeft:"0px",padding:"0px"}}>
+            <Row md={4} style={{marginLeft:"0px"}}>
+                <Col style={{maxWidth:"10vw",height:"100vh",backgroundColor:"black",padding:"0px"}}>
+                    <img src={AppLogoBW} alt="logo"style={{width:"6vw",display:"flex",marginRight:"auto",marginLeft:"auto",paddingBottom:"50px",paddingTop:"50px"}}></img>
+                <Accordion defaultActiveKey="0">
+                        <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center"}}>
+                        Dashboard
+                        </Accordion.Toggle>
+                </Accordion>
+                <Accordion defaultActiveKey="0">
+                        <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center"}}>
+                        Locations
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="0" style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center"}}>
+                        <Card.Body>Hello! I'm the body</Card.Body>
+                        </Accordion.Collapse>
+                </Accordion>
                 
-            </div>
-            <div class="column">
-                <div style={{display:"flex",marginRight:"auto",backgroundColor:"Black",width:"91.87vw",marginLeft:"0px",height:"100px",textAlign:"center",justifyContent:"center"}}>
-                    <div style={{marginTop:"auto",marginBottom:"auto",color:"White",fontFamily:"Segoe UI",fontSize:"38px",fontWeight:"lighter"} }>
-                        <h1 onClick="loadInItems()" style={{fontFamily:"Segoe UI",fontSize:"30px",fontWeight:"lighter"}}>Hello, {fname} </h1>
-                    </div>
+                <Accordion defaultActiveKey="0">
+                        <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center"}}>
+                        Devices
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="0" style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center"}}>
+                        <Card.Body>Hello! I'm the body</Card.Body>
+                        </Accordion.Collapse>
+                        <Accordion.Collapse eventKey="0" style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center"}}>
+                        <Card.Body>Hello! I'm the body</Card.Body>
+                        </Accordion.Collapse>
+                </Accordion>
+                <Accordion defaultActiveKey="0">
+                        <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center"}}>
+                        About
+                        </Accordion.Toggle>
+                </Accordion>
+                <p style={{color:"grey",backgroundColor:"black",display:"flex",marginTop:"auto",paddingTop:"50vh",textAlign:"center",padding:"8px",fontFamily:"Segoe UI",fontSize:"15px",fontWeight:"lighter",}}>
+                    Copyright© 2021 SDD. All rights reserved.</p>
+                </Col>
+                <Col xs={6} style={{paddingLeft:"0px"}}>
+                <div style={{marginRight:"auto",backgroundColor:"Black",width:"90vw",marginLeft:"0px",height:"50px",textAlign:"center",justifyContent:"center",display:"inline-block"}}>
+                <div style={{marginTop:"auto",marginBottom:"auto",color:"White",fontFamily:"Segoe UI",fontSize:"38px",fontWeight:"lighter",display:"flex"} }>
+                    <h1 onClick="loadInItems()" style={{fontFamily:"Segoe UI",fontSize:"30px",fontWeight:"lighter",marginLeft:"auto"}}>Dashboard </h1>
                     
-                    
+                    <Dropdown style={{display:"flex",marginTop:"auto",marginBottom:"auto",marginLeft:"auto",backgroundColor:"Black"}}>
+                        <Dropdown.Toggle id="dropdown-basic"style={{backgroundColor:"Black",borderColor:"Black",fontFamily:"Segoe UI",fontWeight:"lighter"}}>
+                            {fname} {lname} <Spinner animation="grow" variant="success" size="sm" />
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu style={{backgroundColor:"black",color:"#fd8708"}}>
+                            <Dropdown.Item style={{backgroundColor:"black",color:"white",fontFamily:"Segoe UI",fontWeight:"lighter"}} href="#/action-1">Settings</Dropdown.Item>
+                            <Dropdown.Item style={{backgroundColor:"black",color:"white",fontFamily:"Segoe UI",fontWeight:"lighter"}} href="#/action-2">Logout</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </div>
-                <div style={{padding:"20px"}}>
-                <Card  style={{height:"40vh",textAlign:"center",borderRadius:"20px",boxShadow:"5px 10px #AAAAAA"}}>
-                        
-                    </Card></div>
-            </div>
-            {/* <div style={{backgroundColor:"Black",width:"1000%"}}>
-                hiiiiiiiiiiiiiiiiiiiiiiiiiii
-            
-            </div> */}
-            
         </div>
-    
 
-      
-
-      </>
+                </Col>
+            </Row>
+        </Container>
+        </>
+            
       )
 }
 
