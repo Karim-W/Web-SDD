@@ -45,20 +45,21 @@ function SidebarItem({ depthStep = 10, depth = 0, expanded, item, ...rest }) {
         button
         dense
         {...rest}
-        style={{backgroundColor:"#fd8708"}}
+        style={{backgroundColor:"#fd8708",color:"Black",display:"flex",justifyContent:"center"}}
+        
       >
         <div
           style={{ paddingLeft: depth * depthStep }}
           className="sidebar-item-content"
         >
-          {Icon && <Icon className="sidebar-item-icon" fontSize="small" style={{color:"#fd8708",backgroundColor:"#fd8708"}}/>}
+          {Icon && <Icon className="sidebar-item-icon" fontSize="small" />}
           <div className="sidebar-item-text">{label}</div>
         </div>
         {expandIcon}
       </ListItem>
-      <Collapse style={{color:"#fd8708",backgroundColor:"#fd8708"}} in={!collapsed} timeout="auto" unmountOnExit>
+      <Collapse  in={!collapsed} timeout="auto" unmountOnExit>
         {Array.isArray(items) ? (
-          <List disablePadding dense style={{color:"#fd8708",backgroundColor:"#fd8708",msScrollbarHighlightColor:"white"}}>
+          <List disablePadding dense style={{}}>
             {items.map((subItem, index) => (
               <React.Fragment key={`${subItem.name}${index}`}>
                 {subItem === "divider" ? (

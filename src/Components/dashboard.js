@@ -10,6 +10,10 @@ import AppLogoBW from './Assets/Images/AppLogoBW.jpg'
 import "bootstrap/dist/css/bootstrap.min.css"
 import firebase from '../firebase'
 import {useAuth} from '../contexts/AuthContext'
+import { Card} from 'react-bootstrap'
+// import '../node_modules/react-vis/dist/style.css';
+import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries} from 'react-vis';
+
 
 function onClick(e, item) {
   window.alert(JSON.stringify(item, null, 2));
@@ -38,6 +42,20 @@ const items = [
         ],
       },
   ]
+  
+
+  const data = [
+    {x: 0, y: 8},
+    {x: 1, y: 5},
+    {x: 2, y: 4},
+    {x: 3, y: 9},
+    {x: 4, y: 1},
+    {x: 5, y: 7},
+    {x: 6, y: 6},
+    {x: 7, y: 3},
+    {x: 8, y: 2},
+    {x: 9, y: 0}
+  ];
   
 
 export default function Dashboard() {
@@ -73,13 +91,17 @@ export default function Dashboard() {
                 
             </div>
             <div class="column">
-                <div style={{display:"flex",marginRight:"auto",backgroundColor:"Black",width:"91.87vw",marginLeft:"0px",height:"50px",textAlign:"center",justifyContent:"center"}}>
-                    <div style={{marginTop:"auto",marginBottom:"auto",color:"White",fontFamily:"Segoe UI",fontSize:"24px",fontWeight:"lighter"} }>
-                        <h1 onClick="loadInItems()" style={{fontFamily:"Segoe UI",fontSize:"24px",fontWeight:"lighter"}}>Hello, {fname} </h1>
-                        </div>
+                <div style={{display:"flex",marginRight:"auto",backgroundColor:"Black",width:"91.87vw",marginLeft:"0px",height:"100px",textAlign:"center",justifyContent:"center"}}>
+                    <div style={{marginTop:"auto",marginBottom:"auto",color:"White",fontFamily:"Segoe UI",fontSize:"38px",fontWeight:"lighter"} }>
+                        <h1 onClick="loadInItems()" style={{fontFamily:"Segoe UI",fontSize:"30px",fontWeight:"lighter"}}>Hello, {fname} </h1>
+                    </div>
+                    
                     
                 </div>
-                
+                <div style={{padding:"20px"}}>
+                <Card  style={{height:"40vh",textAlign:"center",borderRadius:"20px",boxShadow:"5px 10px #AAAAAA"}}>
+                        
+                    </Card></div>
             </div>
             {/* <div style={{backgroundColor:"Black",width:"1000%"}}>
                 hiiiiiiiiiiiiiiiiiiiiiiiiiii
