@@ -11,7 +11,7 @@ export default function Dashboard() {
     const [lname,setLname] = useState()
     const [locs,setLocs] = useState()
     const {currentUser} = useAuth()
-    const [totalData,setTotalData] = useAuth()
+    const [totalData,setTotalData] = useState()
     //const listItems = useAuth()
     useEffect(() => {
         const DBref = firebase.database().ref().child("users").child(currentUser.uid)
