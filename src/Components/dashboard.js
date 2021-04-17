@@ -11,6 +11,8 @@ export default function Dashboard() {
     const [lname,setLname] = useState()
     const [locs,setLocs] = useState()
     const {currentUser} = useAuth()
+    const [totalData,setTotalData] = useAuth()
+    //const listItems = useAuth()
     useEffect(() => {
         const DBref = firebase.database().ref().child("users").child(currentUser.uid)
         DBref.on('value',(snapshot)=>{
@@ -20,11 +22,44 @@ export default function Dashboard() {
             setLname(myUser.Last_Name)
             console.log(Object.keys(locs).length)
             console.log(fname)
-            setLocs(locs)
-            console.log(locs)
-        })
-    }, [])
-    
+            var locsID = []
+            var LL =[]
+            setLocs("")
+            for (var key in locs) {
+                if (locs.hasOwnProperty(key)) {
+                    console.log(key + " -> " + locs[key].id);
+                    locsID.push(locs[key].id)
+                }
+            }
+            if(locsID.length>0){
+                for(var l in locsID){
+                    console.log(locsID[l])
+                const locsref = firebase.database().ref().child("Locations").child(locsID[l])
+                locsref.on('value',(snapshot)=>{
+                    var myL = snapshot.val()
+                    console.log("my loc is")
+                    console.log(myL)
+                    LL.push(myL)
+                })
+                setLocs(LL)
+               // listItems = locs.map((d) => <li key={d.name}>{d.name}</li>);
+            }
+            }
+    })}, [])
+
+    function List({}) {
+        const itemList = locs.map((item) => (
+          <li>
+            {item.name}
+          </li>
+        ));
+        return (
+          <div style={{backgroundColor:"#fd8708",display:"flex",marginLeft:"auto",marginRight:"auto"}}>
+            <ol style={{ listStyleType: "none" }}>{itemList}</ol>
+          </div>
+        );
+      }
+
     return (
         <>
         <Container style={{marginLeft:"0px",padding:"0px"}}>
@@ -42,9 +77,10 @@ export default function Dashboard() {
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0" style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center"}}>
                         <Card.Body>Hello! I'm the body</Card.Body>
+                        {/* <Card.Body>{locs}</Card.Body> */}
                         </Accordion.Collapse>
                 </Accordion>
-                
+                <List />
                 <Accordion defaultActiveKey="0">
                         <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center"}}>
                         Devices
@@ -81,7 +117,7 @@ export default function Dashboard() {
                     </Dropdown>
                 </div>
         </div>
-
+        {/* <List/> */}
                 </Col>
             </Row>
         </Container>
