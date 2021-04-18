@@ -13,9 +13,9 @@ class MainGraph extends React.Component{
     }
 
     componentDidMount()  {
-        for(var k in this.props.locs.violations){
-            console.log("ello"+k.toString)
-        }
+        // for(var k in this.props.locs.violations){
+        //     console.log("ello"+k.toString)
+        // }
 
     }
    render(){
@@ -25,7 +25,7 @@ class MainGraph extends React.Component{
     //    });
     const elements = this.props.locs;
 
-    const items = []
+    const items = [""]
 
     for (const [index, value] of elements.entries()) {
         //items.push(<li key={index}>{value.violations}</li>)
@@ -38,6 +38,7 @@ class MainGraph extends React.Component{
             console.log("date")
             console.log(Object.keys(element))
             kiwi.push(Object.values(element))
+            //items.push(<li>{Object.values(element)}</li>)
             console.log("length")
             console.log(Object.keys(element).length)
         });

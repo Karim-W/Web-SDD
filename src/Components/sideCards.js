@@ -90,14 +90,20 @@ class SideCards extends React.Component{
         
         // }
         // )})
-        console.log("fuck")
-        console.log(this.props.locs)
-        for(var i in this.props.locs){
-            this.state.locsIDlist = this.props.locs[i]
-        }
-        console.log(this.state.locsIDlist)
+        // console.log("fuck")
+        // console.log(this.props.locs)
+        // for(var i in this.props.locs){
+        //     this.state.locsIDlist = this.props.locs[i]
+        // }
+        // console.log(this.state.locsIDlist)
     }
    render(){
+    console.log("fuck")
+    console.log(this.props.locs)
+    for(var i in this.props.locs){
+        this.state.locsIDlist = this.props.locs[i]
+    }
+    console.log(this.state.locsIDlist)
     return (
       <>
       {this.props.locs.map(function(d, idx){
