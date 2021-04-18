@@ -1,17 +1,20 @@
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useState,Fragment} from 'react'
 import AppLogoBW from './Assets/Images/AppLogoBW.jpg'
 import "bootstrap/dist/css/bootstrap.min.css"
 import firebase from '../firebase'
 import {useAuth} from '../contexts/AuthContext'
 import { Dropdown,Spinner,Row,Col,Container,Accordion,Card} from 'react-bootstrap'
 import MainGraph from './maingraph' 
+import SideCard from './sideCards'
 
 export default function Dashboard() {
     const [fname,setFname] = useState()
     const [lname,setLname] = useState()
     const [locs,setLocs] = useState()
+    const [locsName,setLocsName] = useState()
     const {currentUser} = useAuth()
     const [totalData,setTotalData] = useState()
+    
     //const listItems = useAuth()
     useEffect(() => {
         const DBref = firebase.database().ref().child("users").child(currentUser.uid)
@@ -32,33 +35,24 @@ export default function Dashboard() {
                 }
             }
             if(locsID.length>0){
+                 setLocs(locsID)
+                 var bL = []
                 for(var l in locsID){
                     console.log(locsID[l])
                 const locsref = firebase.database().ref().child("Locations").child(locsID[l])
                 locsref.on('value',(snapshot)=>{
                     var myL = snapshot.val()
                     console.log("my loc is")
-                    console.log(myL)
-                    LL.push(myL)
+                    console.log(myL.name)
+                    bL.push(myL)
+                    //locsName.push(myL.name)
                 })
                 setLocs(LL)
-               // listItems = locs.map((d) => <li key={d.name}>{d.name}</li>);
+               
             }
+            setLocsName(bL)
             }
     })}, [])
-
-    function List({}) {
-        const itemList = locs.map((item) => (
-          <li>
-            {item.name}
-          </li>
-        ));
-        return (
-          <div style={{backgroundColor:"#fd8708",display:"flex",marginLeft:"auto",marginRight:"auto"}}>
-            <ol style={{ listStyleType: "none" }}>{itemList}</ol>
-          </div>
-        );
-      }
 
     return (
         <>
@@ -71,32 +65,29 @@ export default function Dashboard() {
                         Dashboard
                         </Accordion.Toggle>
                 </Accordion>
-                <Accordion defaultActiveKey="0">
+                {/*<Accordion defaultActiveKey="0">
                         <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center"}}>
                         Locations
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0" style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center"}}>
-                        <Card.Body>Hello! I'm the body</Card.Body>
+                        
+                        {/* <Card.Body>Hello! I'm the body</Card.Body> */}
                         {/* <Card.Body>{locs}</Card.Body> */}
-                        </Accordion.Collapse>
-                </Accordion>
-                <List />
-                <Accordion defaultActiveKey="0">
-                        <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center"}}>
-                        Devices
+                        {/* <List /> */}
+                        {/* <Card.Body>name</Card.Body> */}
+                        
+                        {/* </Accordion.Collapse> */}
+                        {/* <SideCard loc={locs}/> */}
+                        {/* <SideCard loc={locs}/> */}
+                        <Accordion defaultActiveKey="0">
+                        <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center",width:"10vw",backgroundColor:"black"}}>
+                        Locations
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0" style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center"}}>
-                        <Card.Body>Hello! I'm the body</Card.Body>
+                        <SideCard locs={locsName}/>
                         </Accordion.Collapse>
-                        <Accordion.Collapse eventKey="0" style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center"}}>
-                        <Card.Body>Hello! I'm the body</Card.Body>
-                        </Accordion.Collapse>
-                </Accordion>
-                <Accordion defaultActiveKey="0">
-                        <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center"}}>
-                        About
-                        </Accordion.Toggle>
-                </Accordion>
+                        </Accordion>
+               
                 <p style={{color:"grey",backgroundColor:"black",display:"flex",marginTop:"auto",paddingTop:"50vh",textAlign:"center",padding:"8px",fontFamily:"Segoe UI",fontSize:"15px",fontWeight:"lighter",}}>
                     Copyright© 2021 SDD. All rights reserved.</p>
                 </Col>
@@ -118,6 +109,7 @@ export default function Dashboard() {
                 </div>
         </div>
         {/* <List/> */}
+        {/* <SideCard locs={locsName}/> */}
                 </Col>
             </Row>
         </Container>
