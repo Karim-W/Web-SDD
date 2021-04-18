@@ -110,6 +110,7 @@ export default function Dashboard() {
         </div>
         {/* <List/> */}
         {/* <SideCard locs={locsName}/> */}
+        <MainGraph locs={locsName}/>
                 </Col>
             </Row>
         </Container>

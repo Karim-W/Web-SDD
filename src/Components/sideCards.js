@@ -73,6 +73,7 @@ class SideCards extends React.Component{
         {name: "Pete Hunt", text: "This is one comment"},
         {name: "Jordan Walke", text: "This is *another* comment"}
       ]
+      
 
     componentDidMount()  {
        // for(var i in this.state.loc){
@@ -101,11 +102,18 @@ class SideCards extends React.Component{
       <>
       {this.props.locs.map(function(d, idx){
          return (<Card.Body style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}>{d.name}</Card.Body>)})}
+         {/* <p>Hello</p> */}
       </>
     );
   }
   
   }
+  SideCards.defaultProps = {
+    locs: [
+        {name: " ", text: "This is one comment"},
+        {name: " ", text: "This is *another* comment"}
+      ]
+};
 
   export default SideCards;
 

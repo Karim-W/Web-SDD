@@ -1,26 +1,66 @@
-import React,{useEffect,useState} from 'react'
-import {useAuth} from '../contexts/AuthContext'
-import firebase from '../firebase'
+import React from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import firebase from 'firebase';
+import {Card} from 'react-bootstrap'
 
+class MainGraph extends React.Component{
 
-function App() {
-    const [loc,setLoc] = useState()
-    const {currentUser} = useAuth()
+    constructor(props) {
     
-    useEffect(()=>{
-        const DBref = firebase.database().ref().child("users").child(currentUser.uid)
-        DBref.on('value',(snapshot)=>{
-            console.log(snapshot.Val())
-            setLoc(snapshot.val())
-        })
-    },[])
-    return (
-        <div>
-            {{loc}}
-        </div>
-    )
-}
+        super(props);
+       
+        this.state = {data : []}
+    }
 
-export default App;
+    componentDidMount()  {
+        for(var k in this.props.locs.violations){
+            console.log("ello"+k.toString)
+        }
+
+    }
+   render(){
+    //    const items = []
+    //    this.props.locs[0].violations.forEach(element => {
+    //    items.push(<li key={element}>{this.props.locs[0].violations[element]}</li>)
+    //    });
+    const elements = this.props.locs;
+
+    const items = []
+
+    for (const [index, value] of elements.entries()) {
+        //items.push(<li key={index}>{value.violations}</li>)
+        console.log("slice")
+        console.log(value.violations)
+        var tar=[""]
+        var kiwi = [""]
+        tar.push(value.violations)
+        tar.forEach(element => {
+            console.log("date")
+            console.log(Object.keys(element))
+            kiwi.push(Object.values(element))
+            console.log("length")
+            console.log(Object.keys(element).length)
+        });
+        kiwi.forEach(k =>{
+            console.log("time")
+            console.log(k)
+            console.log("length"+k.length.toString())
+        })
+    }
+    return (
+      <>
+      {items}
+      {/* hiyo */}
+      </>
+    );
+  }
+  
+  }
+MainGraph.defaultProps = {
+    locs:[{violations:{"-1:1":4}},{violations:{"-1:1":4}}]
+}
+  export default MainGraph;
+
+
 
 
