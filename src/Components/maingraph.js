@@ -1,7 +1,7 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import firebase from 'firebase';
-import {Card} from 'react-bootstrap'
+// import firebase from 'firebase';
+// import {Card} from 'react-bootstrap'
 
 class MainGraph extends React.Component{
 

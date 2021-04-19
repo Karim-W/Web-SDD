@@ -1,125 +1,120 @@
-// import React,{useEffect,useState, Component } from 'react'
-// import {Card} from 'react-bootstrap'
-// import firebase from '../firebase'
+import React,{useEffect,useState, Component } from 'react'
+import {Card} from 'react-bootstrap'
+import firebase from '../firebase'
+import {Link,useHistory} from 'react-router-dom'
 
 
+export default function SideCard(props) {
+    const [dalistItems,setListItems]=useState([])
+    const [listID,setListID]=useState([])
+    const History = useHistory()
 
+    useEffect(()=>{
+        for(var i =0;i<props.locs.length;i++){
+            setListItems([...dalistItems,props.locs[i]])
+        }
+            // props.locs.forEach(element => {
+            //     setListItems([...dalistItems,element])
+            // });
+    },[])
 
-// const SideCards = (props) => {
+    function handleSubmit(e){
+        e.preventDefault()
+        History.push({pathname: '/loc',
+        search: '/preap'})
+
+    }
+
+    console.log(dalistItems)
+    return(
+    <div>
+        {dalistItems.map(function(d, idx){
+            return (<Card.Body onClick={handleSubmit} key={d.id} style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}>{d.name}</Card.Body>)})}
+    </div>)
+}
+SideCard.defaultProps = {
+        locs: [
+            {name: " ", text: "This is one comment"},
+            {name: " ", text: "This is *another* comment"}
+          ]
+        }
+
+// const SideCard = (props) => {
 //     // var listItems = props.loc.map((d) => <li key={d.name}>{d.name}</li>);
-//     const [sideL,setSideL] = useState()
-//     var LL = useState()
-//     useEffect(async () => {
-        
-//         for(var l in props.loc){
-//         const locsref = await firebase.database().ref().child("Locations").child(props.loc[l])
-//                 locsref.on('value',(snapshot)=>{
-                    
-//                     const myL = snapshot.val()
-//                     console.log(snapshot.val())
-//                     console.log("my loc is")
 
-//                     LL.push(myL.name)
-//                 })
-//             }
-//             setSideL(LL)
-//             console.log(LL+"jello")
-//             getScores();
-//     }, [])
+    // return(<div>
+    //           {this.props.locs.map(function(d, idx){
+    //      return (<Card.Body style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}>{d}</Card.Body>)})}
+    // </div>)
 
-//     const getScores = () => async dispatch => {
-//         try {
-//             var LL = []
-//         for(var l in props.loc){
-//           const score = await firebase.database().child("Locations").child(props.loc[l])
-//           return score.once("value", snapshot => {
-//             const res = snapshot.map(childSnapshot => childSnapshot.toJSON())
-//             console.log(res+"hawk")
-//             return dispatch({ payload: res });
-//           })
-//         }}catch(err){
-//           dispatch({ payload: err });
-//         }
-//       }
-
-//     return(<div>
-//         <Card.Body style={{color:"red"}}>{LL.toString}</Card.Body>
-//     </div>)
-//     // return sideL.map((d) => <Card.body>{d.name}</Card.body>);
 // }
 
-// SideCards.defaultProps ={
-//     loc:
-//         {name:" "},
-//     }
+// export default SideCard
 
+// import React from 'react'
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import {Card} from 'react-bootstrap'
 
-// export default SideCards
+// class SideCards extends React.Component{
 
-import React from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import firebase from 'firebase';
-import {Card} from 'react-bootstrap'
-
-class SideCards extends React.Component{
-
-    constructor(props) {
+//     constructor(props) {
     
-        super(props);
+//         super(props);
        
-        this.state = {locsIDlist : []}
-    }
-    locs= [
-        {name: "Pete Hunt", text: "This is one comment"},
-        {name: "Jordan Walke", text: "This is *another* comment"}
-      ]
+//         this.state = {locsIDlist : []}
+//     }
+//     locs= [
+//         {name: "Pete Hunt", text: "This is one comment"},
+//         {name: "Jordan Walke", text: "This is *another* comment"}
+//       ]
       
 
-    componentDidMount()  {
-       // for(var i in this.state.loc){
-        // firebase.database().ref("Locations").on("value", snapshot => {
-        //   let studentlist = [];
-        //     // locsref.on('value',(snap)=>{
-        //         snapshot.forEach(snap => {
-        //       // snap.val() is the dictionary with all your keys/values from the 'students-list' path
-        //       studentlist.push(snap.val());
-        //       console.log(snap.val().name)
+//     componentDidMount()  {
+//        // for(var i in this.state.loc){
+//         // firebase.database().ref("Locations").on("value", snapshot => {
+//         //   let studentlist = [];
+//         //     // locsref.on('value',(snap)=>{
+//         //         snapshot.forEach(snap => {
+//         //       // snap.val() is the dictionary with all your keys/values from the 'students-list' path
+//         //       studentlist.push(snap.val());
+//         //       console.log(snap.val().name)
 
-        // //   });
-        //   this.setState({ locsIDlist: studentlist });
+//         // //   });
+//         //   this.setState({ locsIDlist: studentlist });
         
-        // }
-        // )})
-        // console.log("fuck")
-        // console.log(this.props.locs)
-        // for(var i in this.props.locs){
-        //     this.state.locsIDlist = this.props.locs[i]
-        // }
-        // console.log(this.state.locsIDlist)
-    }
-   render(){
-    console.log("fuck")
-    console.log(this.props.locs)
-    for(var i in this.props.locs){
-        this.state.locsIDlist = this.props.locs[i]
-    }
-    console.log(this.state.locsIDlist)
-    return (
-      <>
-      {this.props.locs.map(function(d, idx){
-         return (<Card.Body style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}>{d.name}</Card.Body>)})}
-         {/* <p>Hello</p> */}
-      </>
-    );
-  }
+//         // }
+//         // )})
+//         // console.log("fuck")
+//         // console.log(this.props.locs)
+//         // for(var i in this.props.locs){
+//         //     this.state.locsIDlist = this.props.locs[i]
+//         // }
+//         // console.log(this.state.locsIDlist)
+//         console.log("fuck")
+//     console.log(this.props.locs)
+//     for(var i in this.props.locs){
+//         this.state.locsIDlist = this.props.locs[i]
+//     }
+//     console.log(this.state.locsIDlist)
+//     }
+//    render(){
+    
+    // return (
+    //   <>
+    //   {this.props.locs.map(function(d, idx){
+    //      return (<Card.Body style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}>{d.name}</Card.Body>)})}
+    //      {/* <p>Hello</p> */}
+    //   </>
+    // );
+//   }
   
-  }
-  SideCards.defaultProps = {
-    locs: [
-        {name: " ", text: "This is one comment"},
-        {name: " ", text: "This is *another* comment"}
-      ]
-};
+//   }
+//   SideCards.defaultProps = {
+//     locs: [
+//         {name: " ", text: "This is one comment"},
+//         {name: " ", text: "This is *another* comment"}
+//       ]
+// };
 
-  export default SideCards;
+//   export default SideCards;
 

@@ -8,55 +8,85 @@ import MainGraph from './maingraph'
 import SideCard from './sideCards'
 
 export default function Dashboard() {
-    const [fname,setFname] = useState()
+    const [fname,setFname] = useState(1)
     const [lname,setLname] = useState()
-    const [locs,setLocs] = useState()
-    const [locsName,setLocsName] = useState()
+    // const [locs,setLocs] = useState(2)
+    const [locsNames,setLocsNames] = useState([])
+    const [locIDs,setLocIDs] = useState([])
+    const [gLocations,setGLocations] = useState([])
     const {currentUser} = useAuth()
-    const [totalData,setTotalData] = useState()
+    // const [totalData,setTotalData] = useState()
     
     //const listItems = useAuth()
     useEffect(() => {
-        const DBref = firebase.database().ref().child("users").child(currentUser.uid)
-        DBref.on('value',(snapshot)=>{
-            var myUser = (snapshot.val())
-            var locs = myUser.pairedLocations
-            setFname(myUser.First_Name)
-            setLname(myUser.Last_Name)
-            console.log(Object.keys(locs).length)
-            console.log(fname)
-            var locsID = []
-            var LL =[]
-            setLocs("")
-            for (var key in locs) {
-                if (locs.hasOwnProperty(key)) {
-                    console.log(key + " -> " + locs[key].id);
-                    locsID.push(locs[key].id)
-                }
+        
+        const db = firebase.database().ref().child("users")
+        db.child(currentUser.uid).once('value').then(function(snap){
+            var iDs =[]
+            var data = snap.val()
+            setFname(data.First_Name)
+            setLname(data.Last_Name)
+            var parent = Object.values(data.pairedLocations)
+            for(var i=0;i<parent.length;i++){
+                if(locIDs.indexOf(parent[i].id)==-1){
+                setLocIDs(locIDs=>[...locIDs,parent[i].id])
+                iDs.push(parent[i].id)
+            }}
+            var Ns = []
+            for(var t =0;t<iDs.length;t++){
+                const dbt = firebase.database().ref().child("Locations")
+                dbt.child(iDs[t]).once('value').then(function(sap){
+                    var instLocation =  sap.val()
+                    if(Ns.length<=iDs.length){
+                    setGLocations(gLocations=>[...gLocations,instLocation])
+                    setLocsNames(locsNames=>[...locsNames,instLocation.name])
+                    Ns.push(instLocation.name)
             }
-            if(locsID.length>0){
-                 setLocs(locsID)
-                 var bL = []
-                for(var l in locsID){
-                    console.log(locsID[l])
-                const locsref = firebase.database().ref().child("Locations").child(locsID[l])
-                locsref.on('value',(snapshot)=>{
-                    var myL = snapshot.val()
-                    console.log("my loc is")
-                    console.log(myL.name)
-                    bL.push(myL)
-                    //locsName.push(myL.name)
-                })
-                setLocs(LL)
+            }).catch(err2 => console.log(err2))
+            }
+        }).catch(err => console.log(err))
+    
+    },[])
+    //     const DBref = firebase.database().ref().child("users").child(currentUser.uid)
+    //     DBref.on('value',(snapshot)=>{
+    //         var myUser = (snapshot.val())
+    //         var locs = myUser.pairedLocations
+    //         setFname(myUser.First_Name)
+    //         setLname(myUser.Last_Name)
+    //         console.log(Object.keys(locs).length)
+    //         console.log(fname)
+    //         var locsID = []
+    //         // var LL =[]
+    //         // setLocs("")
+    //         for (var key in locs) {
+    //             if (locs.hasOwnProperty(key)) {
+    //                 console.log(key + " -> " + locs[key].id);
+    //                 locsID.push(locs[key].id)
+    //             }
+    //         }
+    //         if(locsID.length>0){
+    //             //  setLocs(locsID)
+    //              var bL = []
+    //             for(var l in locsID){
+    //                 console.log(locsID[l])
+    //             const locsref = firebase.database().ref().child("Locations").child(locsID[l])
+    //             locsref.on('value',(snapshot)=>{
+    //                 var myL = snapshot.val()
+    //                 console.log("my loc is")
+    //                 console.log(myL.name)
+    //                 bL.push(myL)
+    //                 //locsName.push(myL.name)
+    //             })
+    //             // setLocs(LL)
                
-            }
-            setLocsName(bL)
-            }
-    })}, [])
-
+    //         }
+    //         setLocsName(bL)
+    //         }
+    // } )
+    // , [])
     return (
         <>
-        <Container style={{marginLeft:"0px",padding:"0px"}}>
+                <Container style={{marginLeft:"0px",padding:"0px"}}>
             <Row md={4} style={{marginLeft:"0px"}}>
                 <Col style={{maxWidth:"10vw",height:"100vh",backgroundColor:"black",padding:"0px"}}>
                     <img src={AppLogoBW} alt="logo"style={{width:"6vw",display:"flex",marginRight:"auto",marginLeft:"auto",paddingBottom:"50px",paddingTop:"50px"}}></img>
@@ -65,26 +95,14 @@ export default function Dashboard() {
                         Dashboard
                         </Accordion.Toggle>
                 </Accordion>
-                {/*<Accordion defaultActiveKey="0">
-                        <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center"}}>
-                        Locations
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0" style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center"}}>
-                        
-                        {/* <Card.Body>Hello! I'm the body</Card.Body> */}
-                        {/* <Card.Body>{locs}</Card.Body> */}
-                        {/* <List /> */}
-                        {/* <Card.Body>name</Card.Body> */}
-                        
-                        {/* </Accordion.Collapse> */}
-                        {/* <SideCard loc={locs}/> */}
                         {/* <SideCard loc={locs}/> */}
                         <Accordion defaultActiveKey="0">
-                        <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center",width:"10vw",backgroundColor:"black"}}>
+                        <Accordion.Toggle as={Card.Header} open={false} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center",width:"10vw",backgroundColor:"black"}}>
                         Locations
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0" style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center"}}>
-                        <SideCard locs={locsName}/>
+                        <SideCard locs={gLocations} />
+                        {/* <p>hey lol</p> */}
                         </Accordion.Collapse>
                         </Accordion>
                
@@ -108,9 +126,6 @@ export default function Dashboard() {
                     </Dropdown>
                 </div>
         </div>
-        {/* <List/> */}
-        {/* <SideCard locs={locsName}/> */}
-        <MainGraph locs={locsName}/>
                 </Col>
             </Row>
         </Container>
