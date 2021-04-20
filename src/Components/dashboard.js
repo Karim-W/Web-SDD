@@ -3,9 +3,27 @@ import AppLogoBW from './Assets/Images/AppLogoBW.jpg'
 import "bootstrap/dist/css/bootstrap.min.css"
 import firebase from '../firebase'
 import {useAuth} from '../contexts/AuthContext'
-import { Dropdown,Spinner,Row,Col,Container,Accordion,Card} from 'react-bootstrap'
+import { Dropdown,Spinner,Row,Col,Container,Accordion,Card,Alert} from 'react-bootstrap'
 import MainGraph from './maingraph' 
 import SideCard from './sideCards'
+import {Link,useHistory} from 'react-router-dom'
+import '@devexpress/dx-react-chart-bootstrap4/dist/dx-react-chart-bootstrap4.css';
+import Paper from '@material-ui/core/Paper';
+
+// import {
+//   ArgumentAxis,
+//   ValueAxis,
+//   Chart,
+//   LineSeries,
+// } from '@devexpress/dx-react-chart-material-ui';
+
+import {
+    Chart,
+    BarSeries,
+    ArgumentAxis,
+    ValueAxis,
+  } from '@devexpress/dx-react-chart-material-ui';
+
 
 export default function Dashboard() {
     const [fname,setFname] = useState(1)
@@ -15,10 +33,13 @@ export default function Dashboard() {
     const [locIDs,setLocIDs] = useState([])
     const [gLocations,setGLocations] = useState([])
     const {currentUser} = useAuth()
+    const [dashData,setDashData] = useState([])
+    const History = useHistory()
     // const [totalData,setTotalData] = useState()
     
     //const listItems = useAuth()
     useEffect(() => {
+        
         
         const db = firebase.database().ref().child("users")
         db.child(currentUser.uid).once('value').then(function(snap){
@@ -45,66 +66,65 @@ export default function Dashboard() {
             }).catch(err2 => console.log(err2))
             }
         }).catch(err => console.log(err))
+        var violations = []
+        var rx = []
+        var days = []
+        var count = []
+        gLocations.forEach(element => {
+            violations.push(element.violations)
+        });
+        var strung = JSON.parse(JSON.stringify(violations))
+        //var t = strung[]
+        for(var si =0;si<gLocations.length;si++){//gLocations.length
+        for (var k in strung[si]){
+            days.push(k)
+            var i = 0
+            for(var L in strung[si][k]) {
+                i++
+            }
+            count.push(i)
+        }
+    }
+    var inst
+    var rx = []
+    for (var ind =0;ind<days.length;ind++){
+        const d =days[ind]
+        const v = count[ind]
+        inst = {'day':d,'violations':v}
+        console.log(inst)
+        // setDashData(dashData=>[...dashData,inst])
+        rx.push(inst)
+    }
+    setDashData(rx)
+        
     
     },[])
-    //     const DBref = firebase.database().ref().child("users").child(currentUser.uid)
-    //     DBref.on('value',(snapshot)=>{
-    //         var myUser = (snapshot.val())
-    //         var locs = myUser.pairedLocations
-    //         setFname(myUser.First_Name)
-    //         setLname(myUser.Last_Name)
-    //         console.log(Object.keys(locs).length)
-    //         console.log(fname)
-    //         var locsID = []
-    //         // var LL =[]
-    //         // setLocs("")
-    //         for (var key in locs) {
-    //             if (locs.hasOwnProperty(key)) {
-    //                 console.log(key + " -> " + locs[key].id);
-    //                 locsID.push(locs[key].id)
-    //             }
-    //         }
-    //         if(locsID.length>0){
-    //             //  setLocs(locsID)
-    //              var bL = []
-    //             for(var l in locsID){
-    //                 console.log(locsID[l])
-    //             const locsref = firebase.database().ref().child("Locations").child(locsID[l])
-    //             locsref.on('value',(snapshot)=>{
-    //                 var myL = snapshot.val()
-    //                 console.log("my loc is")
-    //                 console.log(myL.name)
-    //                 bL.push(myL)
-    //                 //locsName.push(myL.name)
-    //             })
-    //             // setLocs(LL)
-               
-    //         }
-    //         setLocsName(bL)
-    //         }
-    // } )
-    // , [])
+
+    console.log(dashData)
     return (
         <>
                 <Container style={{marginLeft:"0px",padding:"0px"}}>
             <Row md={4} style={{marginLeft:"0px"}}>
                 <Col style={{maxWidth:"10vw",height:"100vh",backgroundColor:"black",padding:"0px"}}>
                     <img src={AppLogoBW} alt="logo"style={{width:"6vw",display:"flex",marginRight:"auto",marginLeft:"auto",paddingBottom:"50px",paddingTop:"50px"}}></img>
-                <Accordion defaultActiveKey="0">
-                        <Accordion.Toggle as={Card.Header} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center"}}>
-                        Dashboard
-                        </Accordion.Toggle>
-                </Accordion>
-                        {/* <SideCard loc={locs}/> */}
-                        <Accordion defaultActiveKey="0">
-                        <Accordion.Toggle as={Card.Header} open={false} eventKey="0" style={{color:"white",borderRadius:"0px",textAlign:"center",width:"10vw",backgroundColor:"black"}}>
-                        Locations
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0" style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center"}}>
-                        <SideCard locs={gLocations} />
-                        {/* <p>hey lol</p> */}
-                        </Accordion.Collapse>
-                        </Accordion>
+                        {/* <div style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}> */}
+                            {/* <Card.body>Location</Card.body> */}
+                        {/* //</div> */}
+                        
+                        <Card style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}>
+                            <Card.Body>
+                                Locations
+                            </Card.Body>
+                            <Card.Body>
+                                Analytics
+                            </Card.Body>
+                            <Card.Body>
+                                Devices
+                            </Card.Body>
+                            <Card.Body>
+                                About
+                            </Card.Body>
+                        </Card>
                
                 <p style={{color:"grey",backgroundColor:"black",display:"flex",marginTop:"auto",paddingTop:"50vh",textAlign:"center",padding:"8px",fontFamily:"Segoe UI",fontSize:"15px",fontWeight:"lighter",}}>
                     Copyright© 2021 SDD. All rights reserved.</p>
@@ -126,6 +146,38 @@ export default function Dashboard() {
                     </Dropdown>
                 </div>
         </div>
+        
+        <div style={{display:"flex",marginLeft:"auto",marginRight:"auto",maxWidth:"90vw",paddingLeft:"30px",paddingTop:"30px"}}>
+        {/* <MainGraph data={dashData}/> */}
+        
+        {/* <Alert variant="danger" dismissible>
+        <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+        <p>
+          Change this and that and try again. Duis mollis, est non commodo
+          luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+          Cras mattis consectetur purus sit amet fermentum.
+        </p>
+      </Alert> */}
+        <div>
+        <Paper style={{minWidth:"80vw"}}>
+          <Chart style={{color:"white"}}
+            data={dashData}
+          >
+            <ArgumentAxis />
+            <ValueAxis />
+
+            <BarSeries
+              valueField="violations"
+              argumentField="day"
+            />
+          </Chart>
+        </Paper>
+        
+      </div>
+
+        </div>
+        
+        
                 </Col>
             </Row>
         </Container>
