@@ -1,7 +1,8 @@
 import SignUp from './signup'
 import Dashboard from './dashboard'
 import Login from './login'
-import Location from './location'
+import LocList from './locList'
+import Analytics from './analytics'
 // import { Container } from 'react-bootstrap';
 import {AuthProvider} from '../contexts/AuthContext';
 import {BrowserRouter as Router, Switch,Route} from 'react-router-dom'
@@ -17,7 +18,7 @@ function App() {
           <Route exact path="/" component={Dashboard}/>
           <Route path='/signup' component={SignUp}/>
           <Route path='/login' component={Login}/>
-          <Route path='/loc' component={Location}/>
+          <Route path='/loc' component={LocList}/>
         </Switch>
       </AuthProvider>
       </Router>

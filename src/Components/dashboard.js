@@ -1,4 +1,4 @@
-import React,{useEffect,useState,Fragment} from 'react'
+import React,{useEffect,useState,Fragment,useRef} from 'react'
 import AppLogoBW from './Assets/Images/AppLogoBW.jpg'
 import "bootstrap/dist/css/bootstrap.min.css"
 import firebase from '../firebase'
@@ -23,9 +23,13 @@ import {
     ArgumentAxis,
     ValueAxis,
   } from '@devexpress/dx-react-chart-material-ui';
+import { render } from 'react-dom'
+import SelectInput from '@material-ui/core/Select/SelectInput'
 
 
 export default function Dashboard() {
+    const [dashData,setDashData] = useState([])
+    const [buffer,setbuffer] = useState()
     const [fname,setFname] = useState(1)
     const [lname,setLname] = useState()
     // const [locs,setLocs] = useState(2)
@@ -33,11 +37,16 @@ export default function Dashboard() {
     const [locIDs,setLocIDs] = useState([])
     const [gLocations,setGLocations] = useState([])
     const {currentUser} = useAuth()
-    const [dashData,setDashData] = useState([])
+    const [graph,setgraph] = useState()
     const History = useHistory()
-    // const [totalData,setTotalData] = useState()
+    const [load,setLoad] = useState([])
     
+    
+
+    // const [totalData,setTotalData] = useState()
+    const dataref = useRef([])
     //const listItems = useAuth()
+    dataref.current = [{'day':'','violations':0}]
     useEffect(() => {
         
         
@@ -58,7 +67,8 @@ export default function Dashboard() {
                 const dbt = firebase.database().ref().child("Locations")
                 dbt.child(iDs[t]).once('value').then(function(sap){
                     var instLocation =  sap.val()
-                    if(Ns.length<=iDs.length){
+                    // if(Ns.length<=iDs.length){
+                    if(gLocations.indexOf(instLocation)===-1){
                     setGLocations(gLocations=>[...gLocations,instLocation])
                     setLocsNames(locsNames=>[...locsNames,instLocation.name])
                     Ns.push(instLocation.name)
@@ -95,11 +105,44 @@ export default function Dashboard() {
         // setDashData(dashData=>[...dashData,inst])
         rx.push(inst)
     }
-    setDashData(rx)
-        
+    // setDashData(rx)
     
-    },[])
+    setDashData(rx)
+    setLoad(true)
+    setgraph(renderchart(rx))
+    assgin(rx)
+    },[load])
+ 
+    function renderchart(rx){
+        return(
+            <Paper style={{minWidth:"80vw",maxHeight:"40vh",boxShadow:"2px 2px 5px grey"}}>
+          <Chart style={{color:"white"}}
+            data={rx}
+            title="Total Violation per day" color="black"
+            style={{minWidth:"80vw",maxHeight:"40vh"}}
+          >
+            <ArgumentAxis />
+            <ValueAxis />
 
+            <BarSeries
+              valueField="violations"
+              argumentField="day"
+              color="#fd8708"
+            />
+          </Chart>
+        </Paper>
+        )
+    }
+    async function assgin(r){
+        await setDashData(r)
+        setbuffer("buffer")
+        await sleep(9000)
+
+    }
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
     console.log(dashData)
     return (
         <>
@@ -112,16 +155,19 @@ export default function Dashboard() {
                         {/* //</div> */}
                         
                         <Card style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}>
-                            <Card.Body>
-                                Locations
+                        <Card.Body >
+                                Dashboard
                             </Card.Body>
                             <Card.Body>
+                                <p onClick={loclist}>Locations</p>
+                            </Card.Body>
+                            <Card.Body >
                                 Analytics
                             </Card.Body>
-                            <Card.Body>
+                            <Card.Body >
                                 Devices
                             </Card.Body>
-                            <Card.Body>
+                            <Card.Body >
                                 About
                             </Card.Body>
                         </Card>
@@ -146,8 +192,11 @@ export default function Dashboard() {
                     </Dropdown>
                 </div>
         </div>
-        
-        <div style={{display:"flex",marginLeft:"auto",marginRight:"auto",maxWidth:"90vw",paddingLeft:"30px",paddingTop:"30px"}}>
+        <h1 style={{minWidth:"80vw",fontFamily:"Segoe UI",fontWeight:"lighter",textAlign:"center",paddingTop:"10px"}}>Total Violations per day     </h1>
+        <div style={{display:"flex",marginLeft:"auto",marginRight:"auto",paddingLeft:"30%",paddingRight:"30%",paddingTop:"10px"}}>
+            
+            
+        {/* <div> */}
         {/* <MainGraph data={dashData}/> */}
         
         {/* <Alert variant="danger" dismissible>
@@ -159,19 +208,7 @@ export default function Dashboard() {
         </p>
       </Alert> */}
         <div>
-        <Paper style={{minWidth:"80vw"}}>
-          <Chart style={{color:"white"}}
-            data={dashData}
-          >
-            <ArgumentAxis />
-            <ValueAxis />
-
-            <BarSeries
-              valueField="violations"
-              argumentField="day"
-            />
-          </Chart>
-        </Paper>
+            {graph}
         
       </div>
 
@@ -184,6 +221,21 @@ export default function Dashboard() {
         </>
             
       )
+      async function loclist() {
+        History.push({
+            pathname: '/loc',
+            state: { fn:fname,ln:lname,some: gLocations }
+          })
+        //id.preventDefault()
+        // switch(id){
+        //     case 'L':
+        //         History.push('/loc')
+        //         break;
+        //     default:
+        //         console.log('hi')
+
+        // }
+    }
 }
 
 
