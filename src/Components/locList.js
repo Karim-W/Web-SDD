@@ -8,10 +8,30 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Paper from '@material-ui/core/Paper';
+//import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import FormGroup from '@material-ui/core/FormGroup';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+// import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import FolderIcon from '@material-ui/icons/Folder';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 export default function LocList(props){
 var Locations = []
 const L = props.location.state.some;
+//const classes = useStyles();
+const [dense, setDense] = React.useState(false);
+const [secondary, setSecondary] = React.useState(false);
+
 for (var i =0;i<L.length;i++){
     var found = false;
     for(var k=0;k<Locations.length;k++){
@@ -23,7 +43,13 @@ for (var i =0;i<L.length;i++){
         Locations.push(L[i])
     }
 }
-
+function generate(element) {
+    return [0, 1, 2].map((value) =>
+      React.cloneElement(element, {
+        key: value,
+      }),
+    );
+  }
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -89,28 +115,37 @@ const useStyles = makeStyles((theme) => ({
             </Dropdown>
         </div>
 </div>
-<div style={{display:"flex",marginLeft:"auto",marginRight:"auto",paddingLeft:"30%",paddingRight:"30%",paddingTop:"80px"}}>
-
-<Grid container className={classes.root} spacing={2} style={{minWidth:"80vw",minHeight:"95vh"}}>
-      <Grid item xs={12}>
-        <Grid container justify="left" spacing="10" width>
-          {Locations.map((value) => (
-            <Grid key={value.id}>
-                <div style={{minWidth:"40vw",padding:"5%",justifyContent:"center"}}>
-                    {/* <div style={{minWidth:"30vw",backgroundColor:"#fd8708",padding:"5%",borderRadius:"20px",minHeight:"30vw"}}> */}
-                        
-                        <div class="container">
-                            <img src={value.locImg} alt="Snow" style={{width:"30vw",height:"30vw",position:"relative"}}/>
-                            <p style={{position:"absolute"}}>{value.name}</p>
-                            </div> 
-                    {/* </div> */}
-                    
-                </div>
-            </Grid>
-          ))}
+<div style={{display:"flex",marginLeft:"auto",marginRight:"auto",paddingLeft:"0%",paddingRight:"0%",paddingTop:"20px",minWidth:"80vw",fontFamily:"Segoe UI",fontWeight:"lighter"}}>
+ 
+    <Grid item xs={12} md={6} style={{minWidth:"90vw"}}>
+          <Typography variant="h6" className={classes.title} style={{paddingLeft:"20px",fontFamily:"Segoe UI",fontWeight:"lighter"}}>
+            Locations List
+          </Typography>
+          <div className={classes.demo}>
+            <List dense={dense}>
+            {Locations.map((value) => (
+            <ListItem key={value.id}>
+                  <ListItemAvatar>
+                    <Avatar style={{width:"60px",height:"60px"}}>
+                      <img src={value.locImg} style={{width:"100px"}}/>
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={value.name}
+            secondary={<p>Violations: {value.activeViolations}, Last updated: {value.LastUpdated}, Area: {value.area}, City: {value.city}</p>} style={{width:"60px",paddingLeft:"20px"}}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+))
+        }
+            </List>
+          </div>
         </Grid>
-      </Grid>
-    </Grid>
+      
 
 </div>
 
