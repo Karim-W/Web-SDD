@@ -1,36 +1,22 @@
 import React,{useEffect,useState,Fragment,useRef} from 'react'
 import { Dropdown,Spinner,Row,Col,Container,Accordion,Card,Alert} from 'react-bootstrap'
 import AppLogoBW from './Assets/Images/AppLogoBW.jpg'
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
-import Paper from '@material-ui/core/Paper';
-//import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import FormGroup from '@material-ui/core/FormGroup';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-// import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
+import {Link,useHistory} from 'react-router-dom'
 
 export default function LocList(props){
 var Locations = []
+const History = useHistory()
 const L = props.location.state.some;
-//const classes = useStyles();
-const [dense, setDense] = React.useState(false);
-const [secondary, setSecondary] = React.useState(false);
 
 for (var i =0;i<L.length;i++){
     var found = false;
@@ -42,35 +28,18 @@ for (var i =0;i<L.length;i++){
     if(!found){
         Locations.push(L[i])
     }
-}
-function generate(element) {
-    return [0, 1, 2].map((value) =>
-      React.cloneElement(element, {
-        key: value,
-      }),
-    );
-  }
-const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      height: 140,
-      width: 100,
-    },
-    control: {
-      padding: theme.spacing(2),
-    },
-  }));
-  const [spacing, setSpacing] = React.useState(2);
-  const classes = useStyles();
+} 
+const ColoredLine = ({ color }) => (
+    <hr
+        style={{
+            color: color,
+            backgroundColor: color,
+            height: 1,
+            padding:"0px"
+        }}
+    />
+);
 
-  const handleChange = (event) => {
-    setSpacing(Number(event.target.value));
-  };
-  console.log("ello govna")
-  console.log(props.location.state.some[0].id)
-  
     return (
         <>
         <Container style={{marginLeft:"0px",padding:"0px"}}>
@@ -78,11 +47,11 @@ const useStyles = makeStyles((theme) => ({
         <Col style={{maxWidth:"10vw",height:"110vh",backgroundColor:"black",padding:"0px"}}>
             <img src={AppLogoBW} alt="logo"style={{width:"6vw",display:"flex",marginRight:"auto",marginLeft:"auto",paddingBottom:"50px",paddingTop:"50px"}}></img>
                 <Card style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}>
-                <Card.Body >
+                <Card.Body onClick={dash}>
                                 Dashboard
                             </Card.Body>
                     <Card.Body>
-                        <p>Locations</p>
+                        Locations
                     </Card.Body>
                     <Card.Body >
                         Analytics
@@ -118,11 +87,11 @@ const useStyles = makeStyles((theme) => ({
 <div style={{display:"flex",marginLeft:"auto",marginRight:"auto",paddingLeft:"0%",paddingRight:"0%",paddingTop:"20px",minWidth:"80vw",fontFamily:"Segoe UI",fontWeight:"lighter"}}>
  
     <Grid item xs={12} md={6} style={{minWidth:"90vw"}}>
-          <Typography variant="h6" className={classes.title} style={{paddingLeft:"20px",fontFamily:"Segoe UI",fontWeight:"lighter"}}>
+          <Typography variant="h6"  style={{paddingLeft:"20px",fontFamily:"Segoe UI",fontWeight:"lighter"}}>
             Locations List
           </Typography>
-          <div className={classes.demo}>
-            <List dense={dense}>
+          <div >
+            <List>
             {Locations.map((value) => (
             <ListItem key={value.id}>
                   <ListItemAvatar>
@@ -130,29 +99,41 @@ const useStyles = makeStyles((theme) => ({
                       <img src={value.locImg} style={{width:"100px"}}/>
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText
+                  <ListItemText onClick={() => loc(value)}
                     primary={value.name}
             secondary={<p>Violations: {value.activeViolations}, Last updated: {value.LastUpdated}, Area: {value.area}, City: {value.city}</p>} style={{width:"60px",paddingLeft:"20px"}}
                   />
+                  
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="delete">
                       <DeleteIcon />
                     </IconButton>
+                    
                   </ListItemSecondaryAction>
                 </ListItem>
-))
-        }
+                
+                
+            )
+            )}
+            
             </List>
           </div>
         </Grid>
-      
-
-</div>
-
-
+    </div>
         </Col>
     </Row>
 </Container>
 </>
     )
+    async function loc(v) {
+        History.push({
+            pathname: '/manageloc',
+            state: { fn:props.location.state.fn,ln:props.location.state.ln,some: v }
+          })
+    }
+    async function dash() {
+        History.push({
+            pathname: '/'
+          })
+    }
 }
