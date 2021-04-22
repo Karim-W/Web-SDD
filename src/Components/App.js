@@ -4,7 +4,7 @@ import Login from './login'
 import LocList from './locList'
 import Analytics from './analytics'
 import Location from './location'
-// import { Container } from 'react-bootstrap';
+import Fetch from './fetch'
 import {AuthProvider} from '../contexts/AuthContext';
 import {BrowserRouter as Router, Switch,Route} from 'react-router-dom'
 
@@ -16,11 +16,13 @@ function App() {
       <Router>
       <AuthProvider>
         <Switch>
-          <Route exact path="/" component={Dashboard}/>
+          <Route exact path="/" component={Fetch}/>
+          <Route path='/dashboard' component={Dashboard}/>
           <Route path='/signup' component={SignUp}/>
           <Route path='/login' component={Login}/>
           <Route path='/manageloc' component={Location}/>
           <Route path='/loc' component={LocList}/>
+          <Route path='/analytics' component={Analytics}/>
           
           
         </Switch>

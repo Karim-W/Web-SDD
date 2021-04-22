@@ -3,6 +3,7 @@ import { Dropdown,Spinner,Row,Col,Container,Accordion,Card,Alert} from 'react-bo
 import AppLogoBW from './Assets/Images/AppLogoBW.jpg'
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
+import Paper from '@material-ui/core/Paper';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -77,7 +78,11 @@ for (var i =0;i<L.length;i++){
         </div>
 </div>
 <div style={{display:"flex",marginLeft:"auto",marginRight:"auto",paddingLeft:"0%",paddingRight:"0%",paddingTop:"20px",minWidth:"80vw",fontFamily:"Segoe UI",fontWeight:"lighter"}}>
- 
+<Grid item xs={6} style={{backgroundColor:"red"}}>
+<Paper >
+    <img src={theLocation.locImg} style={{width:"70%"}}/>
+</Paper>
+        </Grid>
     </div>
         </Col>
     </Row>

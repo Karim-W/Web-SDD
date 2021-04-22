@@ -1,5 +1,5 @@
 import React,{useRef,useState} from 'react'
-import { Form,Button, Alert} from 'react-bootstrap'
+import { Form,Button, Alert,Container} from 'react-bootstrap'
 import {useAuth} from '../contexts/AuthContext'
 import logo from './Assets/Images/AppLogo.jpg'
 import {Link,useHistory} from 'react-router-dom'
@@ -33,7 +33,8 @@ export default function SignUp() {
       }
 
     return (
-        <>
+      <Container className="d-flex align-items-center justify-content-center" style = {{minHeight:"100vh",paddingBottom:"15vh"}} >
+      <div>
             <img src={logo} alt="SDD Logo" style={{width:"300px",paddingTop:"auto",paddingBottom:"auto",display:"flex",justifyContent:"center",marginLeft:"auto",marginRight:"auto"}}></img>
                 <h1 className="text-center mb-4"style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Create Account</h1>
                   {error && <Alert variant="danger" style={{textAlign:"center"}}>{error}</Alert>}
@@ -56,6 +57,7 @@ export default function SignUp() {
           <div className="w-100 text-center mt-2">
               Already registered? <Link to='/login'>Log in</Link>   
           </div> 
-        </>
+          </div>
+        </Container>
     )
 }
