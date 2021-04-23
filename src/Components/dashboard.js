@@ -93,7 +93,11 @@ export default function Dashboard() {
             }
             setBusy(false)
             setDashData(rx)
+            console.log("dashData.length")
+            console.log(dashData.length)
+            if(dashData.length!==0){
             isInitialMount.current = false;
+        }
             }).catch(err => console.log(err))
         
     }},[dashData])
@@ -187,7 +191,6 @@ export default function Dashboard() {
       </div>
 
         </div>
-        <Button onClick={console.log("Clicked")}>Click me</Button>
         
                 </Col>
             </Row>
