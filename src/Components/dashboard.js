@@ -3,19 +3,12 @@ import AppLogoBW from './Assets/Images/AppLogoBW.jpg'
 import "bootstrap/dist/css/bootstrap.min.css"
 import firebase from '../firebase'
 import {useAuth} from '../contexts/AuthContext'
-import { Dropdown,Spinner,Row,Col,Container,Accordion,Card,Alert} from 'react-bootstrap'
+import { Dropdown,Spinner,Row,Col,Container,Accordion,Card,Alert, Button} from 'react-bootstrap'
 import MainGraph from './maingraph' 
 import SideCard from './sideCards'
 import {Link,useHistory} from 'react-router-dom'
 import '@devexpress/dx-react-chart-bootstrap4/dist/dx-react-chart-bootstrap4.css';
 import Paper from '@material-ui/core/Paper';
-
-// import {
-//   ArgumentAxis,
-//   ValueAxis,
-//   Chart,
-//   LineSeries,
-// } from '@devexpress/dx-react-chart-material-ui';
 
 import {
     Chart,
@@ -40,16 +33,12 @@ export default function Dashboard() {
     const [graph,setgraph] = useState()
     const History = useHistory()
     const [load,setLoad] = useState([])
+    const [isBusy, setBusy] = useState(true)
+    const isInitialMount = useRef(true);
     
-    
-
-    // const [totalData,setTotalData] = useState()
-    const dataref = useRef([])
-    //const listItems = useAuth()
-    dataref.current = [{'day':'','violations':0}]
     useEffect(() => {
         
-        
+        if(isInitialMount.current){
         const db = firebase.database().ref().child("users")
         db.child(currentUser.uid).once('value').then(function(snap){
             var iDs =[]
@@ -75,52 +64,49 @@ export default function Dashboard() {
             }
             }).catch(err2 => console.log(err2))
             }
-        }).catch(err => console.log(err))
-        var violations = []
-        var rx = []
-        var days = []
-        var count = []
-        gLocations.forEach(element => {
-            violations.push(element.violations)
-        });
-        var strung = JSON.parse(JSON.stringify(violations))
-        //var t = strung[]
-        for(var si =0;si<gLocations.length;si++){//gLocations.length
-        for (var k in strung[si]){
-            days.push(k)
-            var i = 0
-            for(var L in strung[si][k]) {
-                i++
+            var violations = []
+            var rx = []
+            var days = []
+            var count = []
+            gLocations.forEach(element => {
+                violations.push(element.violations)
+            });
+            var strung = JSON.parse(JSON.stringify(violations))
+            //var t = strung[]
+            for(var si =0;si<gLocations.length;si++){//gLocations.length
+            for (var k in strung[si]){
+                days.push(k)
+                var i = 0
+                for(var L in strung[si][k]) {
+                    i++
+                }
+                count.push(i)
             }
-            count.push(i)
-        }
-    }
-    var inst
-    var rx = []
-    for (var ind =0;ind<days.length;ind++){
-        const d =days[ind]
-        const v = count[ind]
-        inst = {'day':d,'violations':v}
-        console.log(inst)
-        // setDashData(dashData=>[...dashData,inst])
-        rx.push(inst)
-    }
-    // setDashData(rx)
-    
-    setDashData(rx)
-    setLoad(true)
-    setgraph(renderchart(rx))
-    assgin(rx)
-    },[load])
+            }
+            var inst
+
+            for (var ind =0;ind<days.length;ind++){
+                const d =days[ind]
+                const v = count[ind]
+                inst = {'day':d,'violations':v} 
+                rx.push(inst)
+            }
+            setBusy(false)
+            setDashData(rx)
+            isInitialMount.current = false;
+            }).catch(err => console.log(err))
+        
+    }},[dashData])
  
     function renderchart(rx){
         return(
             <Paper style={{minWidth:"80vw",maxHeight:"40vh",boxShadow:"2px 2px 5px grey"}}>
           <Chart style={{color:"white"}}
-            data={rx}
-            title="Total Violation per day" color="black"
+            data={dashData}
+             title={dashData.toString}color="black"
             style={{minWidth:"80vw",maxHeight:"40vh"}}
           >
+              {/* title="Total Violation per day" */}
             <ArgumentAxis />
             <ValueAxis />
 
@@ -133,27 +119,12 @@ export default function Dashboard() {
         </Paper>
         )
     }
-    async function assgin(r){
-        await setDashData(r)
-        setbuffer("buffer")
-        await sleep(9000)
-
-    }
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-    
-    console.log(dashData)
     return (
         <>
                 <Container style={{marginLeft:"0px",padding:"0px"}}>
             <Row md={4} style={{marginLeft:"0px"}}>
                 <Col style={{maxWidth:"10vw",height:"100vh",backgroundColor:"black",padding:"0px"}}>
                     <img src={AppLogoBW} alt="logo"style={{width:"6vw",display:"flex",marginRight:"auto",marginLeft:"auto",paddingBottom:"50px",paddingTop:"50px"}}></img>
-                        {/* <div style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}> */}
-                            {/* <Card.body>Location</Card.body> */}
-                        {/* //</div> */}
-                        
                         <Card style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}>
                         <Card.Body >
                                 Dashboard
@@ -194,26 +165,29 @@ export default function Dashboard() {
         </div>
         <h1 style={{minWidth:"80vw",fontFamily:"Segoe UI",fontWeight:"lighter",textAlign:"center",paddingTop:"10px"}}>Total Violations per day     </h1>
         <div style={{display:"flex",marginLeft:"auto",marginRight:"auto",paddingLeft:"30%",paddingRight:"30%",paddingTop:"10px"}}>
-            
-            
-        {/* <div> */}
-        {/* <MainGraph data={dashData}/> */}
-        
-        {/* <Alert variant="danger" dismissible>
-        <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-        <p>
-          Change this and that and try again. Duis mollis, est non commodo
-          luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-          Cras mattis consectetur purus sit amet fermentum.
-        </p>
-      </Alert> */}
         <div>
-            {graph}
-        
+        {/* {isBusy?<p>hello</p>:renderchart(dashData)} */}
+        <Paper style={{minWidth:"80vw",maxHeight:"40vh",boxShadow:"2px 2px 5px grey"}}>
+          <Chart style={{color:"white"}}
+            data={dashData}
+             title={dashData.toString}color="black"
+            style={{minWidth:"80vw",maxHeight:"40vh"}}
+          >
+              {/* title="Total Violation per day" */}
+            <ArgumentAxis />
+            <ValueAxis />
+
+            <BarSeries
+              valueField="violations"
+              argumentField="day"
+              color="#fd8708"
+            />
+          </Chart>
+        </Paper>
       </div>
 
         </div>
-        
+        <Button onClick={console.log("Clicked")}>Click me</Button>
         
                 </Col>
             </Row>

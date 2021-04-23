@@ -110,9 +110,7 @@ const ColoredLine = ({ color }) => (
                     </IconButton>
                     
                   </ListItemSecondaryAction>
-                </ListItem>
-                
-                
+                </ListItem>    
             )
             )}
             

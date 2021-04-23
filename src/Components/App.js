@@ -16,8 +16,8 @@ function App() {
       <Router>
       <AuthProvider>
         <Switch>
-          <Route exact path="/" component={Fetch}/>
-          <Route path='/dashboard' component={Dashboard}/>
+          <Route exact path="/" component={Dashboard}/>
+          {/* <Route path='/dashboard' component={Dashboard}/> */}
           <Route path='/signup' component={SignUp}/>
           <Route path='/login' component={Login}/>
           <Route path='/manageloc' component={Location}/>

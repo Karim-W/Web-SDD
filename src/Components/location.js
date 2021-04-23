@@ -2,17 +2,21 @@ import React,{useEffect,useState,Fragment,useRef} from 'react'
 import { Dropdown,Spinner,Row,Col,Container,Accordion,Card,Alert} from 'react-bootstrap'
 import AppLogoBW from './Assets/Images/AppLogoBW.jpg'
 import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
+import {Link,useHistory} from 'react-router-dom'
+import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import Map from './map'
+import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {Link,useHistory} from 'react-router-dom'
+import EnhancedTable from './violationsTable'
 
 export default function Location(props) {
 
@@ -77,13 +81,52 @@ for (var i =0;i<L.length;i++){
             </Dropdown>
         </div>
 </div>
-<div style={{display:"flex",marginLeft:"auto",marginRight:"auto",paddingLeft:"0%",paddingRight:"0%",paddingTop:"20px",minWidth:"80vw",fontFamily:"Segoe UI",fontWeight:"lighter"}}>
-<Grid item xs={6} style={{backgroundColor:"red"}}>
-<Paper >
-    <img src={theLocation.locImg} style={{width:"70%"}}/>
-</Paper>
-        </Grid>
+{/* style={{display:"flex",justifyContent:"center",minWidth:"90vw",fontFamily:"Segoe UI",fontWeight:"lighter"}} */}
+<div style={{display:"flex",minWidth:"90vw",fontFamily:"Segoe UI",fontWeight:"lighter",paddingTop:"20px"}}>
+    <Grid style={{width:"40vw",paddingLeft:"2vw"}}>
+    <Paper style={{width:"40vw",height:"24vw",justifyContent:"center"}}><img src={theLocation.locImg} style={{width:"40vw",padding:"1vw"}}/></Paper>
+    </Grid>
+    <div style={{minWidth:"2vw"}}>
+    <h1>  </h1>
     </div>
+    <Grid style={{width:"40vw",paddingLeft:"2vw"}}>
+        <Paper style={{width:"40vw",justifyContent:"center",height:"24vw",paddingLeft:"2.5vw",paddingRight:"2.5vw"}}>
+            {/* <div style={{display:"flex",paddingTop:"8px"}}>
+            <h3 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Location Name: {theLocation.name}</h3>
+            <IconButton edge="end" aria-label="delete" style={{display:"flex",marginLeft:"auto"}}>
+                      <EditIcon />
+                    </IconButton>
+            </div> */}
+              
+    
+        </Paper>
+    </Grid>
+    </div>
+    {/* {[0,2,3,1,4,5].map((value) => (
+            <ListItem key={value}>
+                  <ListItemAvatar>
+                    <Avatar style={{width:"60px",height:"60px"}}>
+                      
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText 
+                    primary={value}
+            secondary={<p></p>} style={{width:"60px",paddingLeft:"20px"}}
+                  />
+                  
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                    
+                  </ListItemSecondaryAction>
+                </ListItem>    
+            )
+            )} */}
+            <div style={{display:"flex",minWidth:"80vw",marginLeft:"auto",marginRight:"auto",paddingLeft:"5vw",paddingTop:"50px"}}><EnhancedTable vs={theLocation.violations}/>
+
+            </div>
+            
         </Col>
     </Row>
 </Container>
