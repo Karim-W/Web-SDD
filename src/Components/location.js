@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import Map from './map'
 import EnhancedTable from './violationsTable'
+import Popup from './popup'
 import './styles/location.css'
 import {
     Chart,
@@ -28,6 +29,11 @@ const days = Object.values(theLocation.violations).length
 const [dashData,setDashData] = useState([])
 var avg = 0.0
 avg = av/days
+const [isOpen, setIsOpen] = useState(false);
+ 
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  }
 // const dashData = [
 //     {day:"3",violations:4}
 // ]
@@ -109,7 +115,7 @@ useEffect(()=>{
             Copyright© 2021 SDD. All rights reserved.</p>
         </Col>
         <Col xs={6} style={{paddingLeft:"0px"}}>
-        <div style={{marginRight:"auto",backgroundColor:"Black",width:"90vw",marginLeft:"0px",height:"50px",textAlign:"center",justifyContent:"center",display:"inline-block"}}>
+        <div style={{marginRight:"auto",backgroundColor:"Black",width:"89vw",marginLeft:"0px",height:"50px",textAlign:"center",justifyContent:"center",display:"inline-block"}}>
         <div style={{marginTop:"auto",marginBottom:"auto",color:"White",fontFamily:"Segoe UI",fontSize:"38px",fontWeight:"lighter",display:"flex"} }>
     <h1 onClick="loadInItems()" style={{fontFamily:"Segoe UI",fontSize:"30px",fontWeight:"lighter",marginLeft:"auto"}}>{theLocation.name} @ {theLocation.area}</h1>
             
@@ -125,7 +131,7 @@ useEffect(()=>{
             </Dropdown>
         </div>
 </div>
-{/* style={{display:"flex",justifyContent:"center",minWidth:"90vw",fontFamily:"Segoe UI",fontWeight:"lighter"}} */}
+
 <div style={{display:"flex",minWidth:"90vw",fontFamily:"Segoe UI",fontWeight:"lighter",paddingTop:"20px"}}>
     <Grid style={{width:"40vw",paddingLeft:"2.5vw"}}>
     <Paper variant="outlined" style={{width:"40.5vw",height:"24vw",justifyContent:"center",boxShadow:"0px 11px 15px -7px grey"}}>
@@ -139,7 +145,7 @@ useEffect(()=>{
         <Paper variant="outlined" style={{width:"40vw",justifyContent:"center",height:"24vw",paddingLeft:"1vw",paddingRight:"2.5vw",boxShadow:"0px 11px 15px -7px grey"}}>
         <div style={{display:"flex"}}>
         <h5 style={{paddingTop:"30px"}}>Name: <h4>{theLocation.name}</h4></h5>
-        <IconButton style={{paddingTop:"30px",marginLeft:"auto"}} edge="end" aria-label="delete">
+        <IconButton onclick={<Popup/>} style={{paddingTop:"30px",marginLeft:"auto"}} edge="end" aria-label="delete">
             <EditIcon/>
         </IconButton>
         </div>
@@ -157,6 +163,8 @@ useEffect(()=>{
     </Grid>
     </div>
     <div className="innerGraph">
+    <h1 style={{minWidth:"80vw",fontFamily:"Segoe UI",fontWeight:"lighter",textAlign:"center",paddingTop:"10px"}}>Total Violations per day     </h1>
+    
     <Paper variant="outlined" style={{display:"inline",minWidth:"80vw",height:"44vh",boxShadow:"0px 11px 15px -7px grey"}}>
           <Chart 
             data={dashData}
@@ -177,8 +185,8 @@ useEffect(()=>{
     </div>
     
         <div style={{display:"flex"}}>
-            <div style={{display:"flex",minWidth:"43vw",height:"28vw",marginLeft:"auto",marginRight:"auto",paddingLeft:"2.5vw",paddingTop:"50px",boxShadow:"1px 11px 15px -7px grey"}}>
-                <EnhancedTable vs={theLocation.violations}/>
+            <div style={{display:"flex",minWidth:"43vw",height:"28vw",marginLeft:"auto",marginRight:"auto",paddingLeft:"2.5vw",paddingRight:"20px",paddingTop:"50px",boxShadow:"1px 11px 15px -7px grey"}}>
+                <EnhancedTable style={{paddingRight:"10px"}} vs={theLocation.violations}/>
             </div>
             <div style={{display:"flex",minWidth:"40vw",paddingLeft:"4vw",paddingTop:"50px"}}>
                 <Paper variant="outlined" style={{display:"flex",minWidth:"40vw"}}>
@@ -206,11 +214,6 @@ useEffect(()=>{
         History.push({
             pathname: '/'
           })
-        }
-        // async function loc(v) {
-        //     History.push({
-        //         pathname: '/manageloc',
-        //         state: { fn:props.location.state.fn,ln:props.location.state.ln,some: v }
-        //       })
-        //     }
+    }
+   
 }
