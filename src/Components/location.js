@@ -17,6 +17,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EnhancedTable from './violationsTable'
+import { TableSortLabel } from '@material-ui/core';
 
 export default function Location(props) {
 
@@ -24,7 +25,14 @@ var Locations = []
 const History = useHistory()
 const L = props.location.state.some;
 var theLocation = props.location.state.some
-
+const [Tot,SetTot] = useState(0)
+const av =theLocation.activeViolations
+const days = Object.values(theLocation.violations).length
+const avg = av/days
+console.log(av)
+console.log(days)
+console.log(avg)
+console.log(theLocation)
 for (var i =0;i<L.length;i++){
     var found = false;
     for(var k=0;k<Locations.length;k++){
@@ -36,6 +44,20 @@ for (var i =0;i<L.length;i++){
         Locations.push(L[i])
     }
 } 
+// for(var k=0;k<theLocation.violations.length;k++){
+//             for(var i in theLocation.violations[i]){
+//                 console.log(i)
+//                 SetTot(Tot+1)
+//             }
+//         }
+useEffect(()=>{
+    for(var k=0;k<theLocation.violations.length;k++){
+        for(var i in theLocation.violations[i]){
+            console.log(i)
+            SetTot(Tot+1)
+        }
+    }
+},[Tot])
 
     return (
         <>
@@ -83,47 +105,32 @@ for (var i =0;i<L.length;i++){
 </div>
 {/* style={{display:"flex",justifyContent:"center",minWidth:"90vw",fontFamily:"Segoe UI",fontWeight:"lighter"}} */}
 <div style={{display:"flex",minWidth:"90vw",fontFamily:"Segoe UI",fontWeight:"lighter",paddingTop:"20px"}}>
-    <Grid style={{width:"40vw",paddingLeft:"2vw"}}>
-    <Paper style={{width:"40vw",height:"24vw",justifyContent:"center"}}><img src={theLocation.locImg} style={{width:"40vw",padding:"1vw"}}/></Paper>
+    <Grid style={{width:"40vw",paddingLeft:"2.5vw"}}>
+    <Paper style={{width:"40.5vw",height:"24vw",justifyContent:"center",boxShadow:"0px 11px 15px -7px grey"}}><img src={theLocation.locImg} style={{width:"40vw",padding:"1vw"}}/></Paper>
     </Grid>
     <div style={{minWidth:"2vw"}}>
     <h1>  </h1>
     </div>
-    <Grid style={{width:"40vw",paddingLeft:"2vw"}}>
-        <Paper style={{width:"40vw",justifyContent:"center",height:"24vw",paddingLeft:"2.5vw",paddingRight:"2.5vw"}}>
-            {/* <div style={{display:"flex",paddingTop:"8px"}}>
-            <h3 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Location Name: {theLocation.name}</h3>
-            <IconButton edge="end" aria-label="delete" style={{display:"flex",marginLeft:"auto"}}>
-                      <EditIcon />
-                    </IconButton>
-            </div> */}
-              
-    
+    <Grid style={{width:"40vw",paddingLeft:"5vw"}}>
+        <Paper style={{width:"40vw",justifyContent:"center",height:"24vw",paddingLeft:"1vw",paddingRight:"2.5vw",boxShadow:"0px 11px 15px -7px grey"}}>
+        <div style={{display:"flex"}}>
+        <h5 style={{paddingTop:"30px",fontFamily:"Segoe UI",fontWeight:"lighter"}}>Name:    {theLocation.name}</h5>
+        <IconButton style={{paddingTop:"30px",marginLeft:"auto"}} edge="end" aria-label="delete">
+            <EditIcon/>
+        </IconButton>
+        </div>
+        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Area:  {theLocation.area}</h5>
+        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>City:  {theLocation.city}</h5>
+        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Last Updated on:   {theLocation.LastUpdated}</h5>
+        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Location ID:   {theLocation.id}</h5>
+        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Longitude: {theLocation.long}</h5>
+        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Latitude: {theLocation.lat}</h5>
+        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Total violation(s) Recorded: {theLocation.activeViolations}</h5>
+        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Avg. Violation per day: {avg}</h5>
         </Paper>
     </Grid>
     </div>
-    {/* {[0,2,3,1,4,5].map((value) => (
-            <ListItem key={value}>
-                  <ListItemAvatar>
-                    <Avatar style={{width:"60px",height:"60px"}}>
-                      
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText 
-                    primary={value}
-            secondary={<p></p>} style={{width:"60px",paddingLeft:"20px"}}
-                  />
-                  
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                    
-                  </ListItemSecondaryAction>
-                </ListItem>    
-            )
-            )} */}
-            <div style={{display:"flex",minWidth:"80vw",marginLeft:"auto",marginRight:"auto",paddingLeft:"5vw",paddingTop:"50px"}}><EnhancedTable vs={theLocation.violations}/>
+            <div style={{display:"flex",minWidth:"43vw",marginLeft:"auto",marginRight:"auto",paddingLeft:"2.5vw",paddingTop:"50px",boxShadow:"0px 11px 15px -7px grey"}}><EnhancedTable vs={theLocation.violations}/>
 
             </div>
             
@@ -132,6 +139,15 @@ for (var i =0;i<L.length;i++){
 </Container>
 </>
     )
+    async function gettot(){
+        var tot =0
+        for(var k=0;k<theLocation.violations.length;k++){
+            for(var i in theLocation.violations[i]){
+                tot+=1
+            }
+        }
+        return tot
+    }
     async function dash() {
         History.push({
             pathname: '/'

@@ -119,7 +119,7 @@ export default function Dashboard() {
               argumentField="day"
               color="#fd8708"
             />
-          </Chart>
+            </Chart>
         </Paper>
         )
     }

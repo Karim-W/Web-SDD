@@ -20,19 +20,16 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import EditIcon from '@material-ui/icons/Edit';
 
-// function createData(name, calories, fat, carbs, protein) {
-//   return { name, calories, fat, carbs, protein };
-// }
 
 function createData(date,time){
-    return{date,time}
+    return{date:date+" "+time,time:time}
 }
 
 const rows = [
-    createData("12-02-3021","12:31"),
-    createData("12-04-3021","11:31")
-//   createData('Oreo', 437, 18.0, 63, 4.0),
+    // createData("-1","1"),
+    // createData("1","-1")
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -62,8 +59,8 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'date', numeric: false, disablePadding: true, label: 'Date' },
-  { id: 'time', numeric: true, disablePadding: false, label: 'Time' },
+  { id: 'date', numeric: false, disablePadding: true, label: 'Instance' },
+  // { id: 'time', numeric: true, disablePadding: false, label: 'Time' },
 
 ];
 function EnhancedTableHead(props) {
@@ -155,7 +152,7 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Nutrition
+          Violations
         </Typography>
       )}
 
@@ -189,7 +186,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   table: {
-    minWidth: 750,
+    minWidth: '40vw',
   },
   visuallyHidden: {
     border: 0,
@@ -222,9 +219,14 @@ export default function EnhancedTable(props) {
           var date= vs[k]
           for(var i in date){
               tt = createData(k,i)
+              if(temp.indexOf(tt)===-1){
               rows.push(createData(k,i))
               temp.push(tt)
+            }else{
+              console.log("rpeated")
+            }
           }
+          
       }
       //SetVSS(temp)
       
@@ -327,7 +329,7 @@ export default function EnhancedTable(props) {
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.date}
                       </TableCell>
-                      <TableCell align="right">{row.time}</TableCell>
+                      {/* <TableCell align="right">{row.time}</TableCell> */}
                     </TableRow>
                   );
                 })}
