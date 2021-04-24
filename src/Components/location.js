@@ -4,20 +4,12 @@ import AppLogoBW from './Assets/Images/AppLogoBW.jpg'
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import {Link,useHistory} from 'react-router-dom'
-import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import Map from './map'
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EnhancedTable from './violationsTable'
-import { TableSortLabel } from '@material-ui/core';
+import './styles/location.css'
+
 
 export default function Location(props) {
 
@@ -28,11 +20,9 @@ var theLocation = props.location.state.some
 const [Tot,SetTot] = useState(0)
 const av =theLocation.activeViolations
 const days = Object.values(theLocation.violations).length
-const avg = av/days
-console.log(av)
-console.log(days)
-console.log(avg)
-console.log(theLocation)
+var avg = 0.0
+avg = av/days
+
 for (var i =0;i<L.length;i++){
     var found = false;
     for(var k=0;k<Locations.length;k++){
@@ -114,25 +104,34 @@ useEffect(()=>{
     <Grid style={{width:"40vw",paddingLeft:"5vw"}}>
         <Paper style={{width:"40vw",justifyContent:"center",height:"24vw",paddingLeft:"1vw",paddingRight:"2.5vw",boxShadow:"0px 11px 15px -7px grey"}}>
         <div style={{display:"flex"}}>
-        <h5 style={{paddingTop:"30px",fontFamily:"Segoe UI",fontWeight:"lighter"}}>Name:    {theLocation.name}</h5>
+        <h5 style={{paddingTop:"30px"}}>Name: {theLocation.name}</h5>
         <IconButton style={{paddingTop:"30px",marginLeft:"auto"}} edge="end" aria-label="delete">
             <EditIcon/>
         </IconButton>
         </div>
-        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Area:  {theLocation.area}</h5>
-        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>City:  {theLocation.city}</h5>
-        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Last Updated on:   {theLocation.LastUpdated}</h5>
-        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Location ID:   {theLocation.id}</h5>
-        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Longitude: {theLocation.long}</h5>
-        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Latitude: {theLocation.lat}</h5>
-        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Total violation(s) Recorded: {theLocation.activeViolations}</h5>
-        <h5 style={{fontFamily:"Segoe UI",fontWeight:"lighter"}}>Avg. Violation per day: {avg}</h5>
+        <h5>Area: {theLocation.area}</h5>
+        <h5>City: {theLocation.city}</h5>
+        <h5>Last Updated on: {theLocation.LastUpdated}</h5>
+        <h5>Location ID: {theLocation.id}</h5>
+        <h5>Longitude: {theLocation.long}</h5>
+        <h5>Latitude: {theLocation.lat}</h5>
+        <h5>Total violation(s) Recorded: {theLocation.activeViolations}</h5>
+        <h5>Avg. Violation per day: {avg}</h5>
+        <h5>Device Name: {theLocation.device}</h5>
         </Paper>
     </Grid>
     </div>
-            <div style={{display:"flex",minWidth:"43vw",marginLeft:"auto",marginRight:"auto",paddingLeft:"2.5vw",paddingTop:"50px",boxShadow:"0px 11px 15px -7px grey"}}><EnhancedTable vs={theLocation.violations}/>
-
+        <div style={{display:"flex"}}>
+            <div style={{display:"flex",minWidth:"43vw",marginLeft:"auto",marginRight:"auto",paddingLeft:"2.5vw",paddingTop:"50px",boxShadow:"0px 11px 15px -7px grey"}}>
+                <EnhancedTable vs={theLocation.violations}/>
             </div>
+            <div style={{display:"flex",minWidth:"40vw",paddingLeft:"4vw",paddingTop:"30px"}}>
+                <Paper style={{display:"flex",minWidth:"40vw"}}>
+                    <Map/>
+                </Paper>
+            </div>
+        </div>
+            
             
         </Col>
     </Row>
