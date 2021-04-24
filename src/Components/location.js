@@ -9,7 +9,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import Map from './map'
 import EnhancedTable from './violationsTable'
 import './styles/location.css'
-
+import {
+    Chart,
+    BarSeries,
+    ArgumentAxis,
+    ValueAxis,
+  } from '@devexpress/dx-react-chart-material-ui';
 
 export default function Location(props) {
 
@@ -20,9 +25,12 @@ var theLocation = props.location.state.some
 const [Tot,SetTot] = useState(0)
 const av =theLocation.activeViolations
 const days = Object.values(theLocation.violations).length
+const [dashData,setDashData] = useState([])
 var avg = 0.0
 avg = av/days
-
+// const dashData = [
+//     {day:"3",violations:4}
+// ]
 for (var i =0;i<L.length;i++){
     var found = false;
     for(var k=0;k<Locations.length;k++){
@@ -47,13 +55,37 @@ useEffect(()=>{
             SetTot(Tot+1)
         }
     }
+    var strung = JSON.parse(JSON.stringify(theLocation.violations))
+    var rx = []
+    var days = []
+    var count = []
+    
+            for (var k in strung){
+                days.push(k)
+                var i = 0
+                for(var L in strung[k]) {
+                    i++
+                }
+                count.push(i)
+            }
+            
+            var inst
+
+            for (var ind =0;ind<days.length;ind++){
+                const d =days[ind]
+                const v = count[ind]
+                inst = {'day':d,'violations':v} 
+                rx.push(inst)
+            }
+
+            setDashData(rx)
 },[Tot])
 
     return (
         <>
         <Container style={{marginLeft:"0px",padding:"0px"}}>
     <Row md={4} style={{marginLeft:"0px"}}>
-        <Col style={{maxWidth:"10vw",height:"110vh",backgroundColor:"black",padding:"0px"}}>
+        <Col style={{maxWidth:"10vw",height:"170vh",backgroundColor:"black",padding:"0px"}}>
             <img src={AppLogoBW} alt="logo"style={{width:"6vw",display:"flex",marginRight:"auto",marginLeft:"auto",paddingBottom:"50px",paddingTop:"50px"}}></img>
                 <Card style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}>
                 <Card.Body onClick={dash}>
@@ -96,38 +128,61 @@ useEffect(()=>{
 {/* style={{display:"flex",justifyContent:"center",minWidth:"90vw",fontFamily:"Segoe UI",fontWeight:"lighter"}} */}
 <div style={{display:"flex",minWidth:"90vw",fontFamily:"Segoe UI",fontWeight:"lighter",paddingTop:"20px"}}>
     <Grid style={{width:"40vw",paddingLeft:"2.5vw"}}>
-    <Paper style={{width:"40.5vw",height:"24vw",justifyContent:"center",boxShadow:"0px 11px 15px -7px grey"}}><img src={theLocation.locImg} style={{width:"40vw",padding:"1vw"}}/></Paper>
+    <Paper variant="outlined" style={{width:"40.5vw",height:"24vw",justifyContent:"center",boxShadow:"0px 11px 15px -7px grey"}}>
+        <img src={theLocation.locImg} style={{width:"40vw",height:"24vw",padding:"1vw"}}/>
+        </Paper>
     </Grid>
     <div style={{minWidth:"2vw"}}>
     <h1>  </h1>
     </div>
     <Grid style={{width:"40vw",paddingLeft:"5vw"}}>
-        <Paper style={{width:"40vw",justifyContent:"center",height:"24vw",paddingLeft:"1vw",paddingRight:"2.5vw",boxShadow:"0px 11px 15px -7px grey"}}>
+        <Paper variant="outlined" style={{width:"40vw",justifyContent:"center",height:"24vw",paddingLeft:"1vw",paddingRight:"2.5vw",boxShadow:"0px 11px 15px -7px grey"}}>
         <div style={{display:"flex"}}>
-        <h5 style={{paddingTop:"30px"}}>Name: {theLocation.name}</h5>
+        <h5 style={{paddingTop:"30px"}}>Name: <h4>{theLocation.name}</h4></h5>
         <IconButton style={{paddingTop:"30px",marginLeft:"auto"}} edge="end" aria-label="delete">
             <EditIcon/>
         </IconButton>
         </div>
-        <h5>Area: {theLocation.area}</h5>
-        <h5>City: {theLocation.city}</h5>
-        <h5>Last Updated on: {theLocation.LastUpdated}</h5>
-        <h5>Location ID: {theLocation.id}</h5>
-        <h5>Longitude: {theLocation.long}</h5>
-        <h5>Latitude: {theLocation.lat}</h5>
-        <h5>Total violation(s) Recorded: {theLocation.activeViolations}</h5>
-        <h5>Avg. Violation per day: {avg}</h5>
-        <h5>Device Name: {theLocation.device}</h5>
+        <h5>Area: <h4>{theLocation.area}</h4></h5>
+        <h5>City: <h4>{theLocation.city}</h4></h5>
+        <h5>Last Updated on: <h4>{theLocation.LastUpdated}</h4></h5>
+        <h5>Location ID: <h4>{theLocation.id}</h4></h5>
+        <h5>Longitude: <h4>{theLocation.long}</h4></h5>
+        <h5>Latitude: <h4>{theLocation.lat}</h4></h5>
+        <h5>Total violation(s) Recorded: <h4>{theLocation.activeViolations}</h4></h5>
+        <h5>Avg. Violation per day: <h4>{avg}</h4></h5>
+        <h5>Device Name: <h4>{theLocation.device}</h4></h5>
+        <h5>Days where a violation is recorded: <h4>{days}</h4></h5>
         </Paper>
     </Grid>
     </div>
+    <div className="innerGraph">
+    <Paper variant="outlined" style={{display:"inline",minWidth:"80vw",height:"44vh",boxShadow:"0px 11px 15px -7px grey"}}>
+          <Chart 
+            data={dashData}
+             title={dashData.toString}color="black"
+            style={{minWidth:"80vw",maxHeight:"40vh",paddingLeft:"50px"}}
+          >
+              {/* title="Total Violation per day" */}
+            <ArgumentAxis />
+            <ValueAxis />
+
+            <BarSeries
+              valueField="violations"
+              argumentField="day"
+              color="#fd8708"
+            />
+          </Chart>
+        </Paper>
+    </div>
+    
         <div style={{display:"flex"}}>
-            <div style={{display:"flex",minWidth:"43vw",marginLeft:"auto",marginRight:"auto",paddingLeft:"2.5vw",paddingTop:"50px",boxShadow:"0px 11px 15px -7px grey"}}>
+            <div style={{display:"flex",minWidth:"43vw",height:"28vw",marginLeft:"auto",marginRight:"auto",paddingLeft:"2.5vw",paddingTop:"50px",boxShadow:"1px 11px 15px -7px grey"}}>
                 <EnhancedTable vs={theLocation.violations}/>
             </div>
-            <div style={{display:"flex",minWidth:"40vw",paddingLeft:"4vw",paddingTop:"30px"}}>
-                <Paper style={{display:"flex",minWidth:"40vw"}}>
-                    <Map/>
+            <div style={{display:"flex",minWidth:"40vw",paddingLeft:"4vw",paddingTop:"50px"}}>
+                <Paper variant="outlined" style={{display:"flex",minWidth:"40vw"}}>
+                    <Map lat={theLocation.lat} long={theLocation.long}/>
                 </Paper>
             </div>
         </div>
