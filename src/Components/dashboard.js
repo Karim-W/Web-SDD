@@ -9,6 +9,7 @@ import SideCard from './sideCards'
 import {Link,useHistory} from 'react-router-dom'
 import '@devexpress/dx-react-chart-bootstrap4/dist/dx-react-chart-bootstrap4.css';
 import Paper from '@material-ui/core/Paper';
+import './styles/Dash.css'
 
 import {
     Chart,
@@ -189,8 +190,8 @@ export default function Dashboard() {
           </Chart>
         </Paper>
       </div>
-
         </div>
+        <h1 className="QuickLinks">Quick Links</h1>
         
                 </Col>
             </Row>

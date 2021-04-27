@@ -145,9 +145,13 @@ useEffect(()=>{
         <Paper variant="outlined" style={{width:"40vw",justifyContent:"center",height:"24vw",paddingLeft:"1vw",paddingRight:"2.5vw",boxShadow:"0px 11px 15px -7px grey"}}>
         <div style={{display:"flex"}}>
         <h5 style={{paddingTop:"30px"}}>Name: <h4>{theLocation.name}</h4></h5>
-        <IconButton onclick={<Popup/>} style={{paddingTop:"30px",marginLeft:"auto"}} edge="end" aria-label="delete">
+        {/* <IconButton onclick={<Popup/>} style={{paddingTop:"30px",marginLeft:"auto"}} edge="end" aria-label="delete">
             <EditIcon/>
-        </IconButton>
+        </IconButton> */}
+        <div style={{marginLeft:"auto",paddingTop:"10px"}}>
+            <Popup/>
+        </div>
+        
         </div>
         <h5>Area: <h4>{theLocation.area}</h4></h5>
         <h5>City: <h4>{theLocation.city}</h4></h5>
