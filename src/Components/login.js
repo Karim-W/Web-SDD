@@ -7,10 +7,13 @@ import {Link,useHistory} from 'react-router-dom'
 export default function Login() {
     const emailRef = useRef()
     const passRef = useRef()
-    const {SignIn}= useAuth()
+    const {SignIn,currentUser}= useAuth()
     const [error,setError] = useState('')
     const [loading,setLoading] = useState(false)
     const History = useHistory()
+    if(currentUser!==null){
+        History.push("dashboard")
+    }
 
     async function handleSubmit(e){
         

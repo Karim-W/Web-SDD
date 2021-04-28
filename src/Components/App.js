@@ -4,6 +4,7 @@ import Login from './login'
 import LocList from './locList'
 import Analytics from './analytics'
 import Location from './location'
+import About from './about'
 import Fetch from './fetch'
 import {AuthProvider} from '../contexts/AuthContext';
 import {BrowserRouter as Router, Switch,Route} from 'react-router-dom'
@@ -16,8 +17,10 @@ function App() {
       <Router>
       <AuthProvider>
         <Switch>
-          <Route exact path="/" component={Dashboard}/>
-          {/* <Route path='/dashboard' component={Dashboard}/> */}
+          {/* <Route exact path="/" component={Dashboard}/> */}
+          <Route exact path="/" component={Login}/>
+          <Route path='/dashboard' component={Dashboard}/>
+          <Route path='/abt' component={About}/>
           <Route path='/signup' component={SignUp}/>
           <Route path='/login' component={Login}/>
           <Route path='/manageloc' component={Location}/>

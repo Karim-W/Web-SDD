@@ -36,6 +36,27 @@ export default function Dashboard() {
     const [load,setLoad] = useState([])
     const [isBusy, setBusy] = useState(true)
     const isInitialMount = useRef(true);
+    var Links =[{name:"UAE Covid: Shopping centre shut, fined as discount sale causes crowds",
+    link:"https://www.khaleejtimes.com/coronavirus-pandemic/20210306/uae-covid-shopping-centre-shut-fined-as-discount-sale-causes-crowds",
+    desc:"Authorities in Ajman have closed down a shopping centre and fined its owner Dh5,000 after massive crowds thronged the venue for a discount scheme.",
+    img:"https://images.khaleejtimes.com/storyimage/KT/20210306/ARTICLE/210309420/AR/0/AR-210309420.jpg&MaxW=780&imageVersion=16by9&NCS_modified=20210319115631"
+},{name:"Dubai Covid-19: Full list of new rules for travel, malls, hospitals",
+desc:"Authorities in Dubai have issued multiple measures to boost Covid-19 safety in the emirate. The new rules range from closing down pubs and bars to ramping up PCR testing for passengers; cracking down on private parties and events...",
+img:"https://images.khaleejtimes.com/storyimage/KT/20210202/ARTICLE/210209851/AR/0/AR-210209851.jpg&MaxW=780&imageVersion=16by9&NCS_modified=20210202082935",
+link:"https://www.khaleejtimes.com/coronavirus-pandemic/dubai-covid-19-full-list-of-new-rules-for-travel-malls-hospitals"},
+{name:"Dubai store closed, fined Dh50,000 for not following Covid-19 norms during discount sale",
+desc:"Dubai Economy emphasised that all stores and outlets as well as their customers must strictly adhere to the precautionary measures.",
+img:"https://images.khaleejtimes.com/storyimage/KT/20200910/ARTICLE/200908845/AR/0/AR-200908845.jpg&MaxW=780&imageVersion=16by9&NCS_modified=20200910194805",
+link:"https://www.khaleejtimes.com/uae/dubai/dubai-store-closed-fined-Dh-50,000-for-not-following-covid-19-norms-during-discount-sale-"},
+{
+    name:"mems"
+},{
+    name:"mems"
+},{
+    name:"mems"
+}
+
+]
     
     useEffect(() => {
         
@@ -103,18 +124,6 @@ export default function Dashboard() {
         
     }},[dashData])
 
-    function renderLinks(){
-        var links=[
-            {name:"",
-            link:"https://www.khaleejtimes.com/coronavirus-pandemic/20210306/uae-covid-shopping-centre-shut-fined-as-discount-sale-causes-crowds",
-            desc:"Authorities in Ajman have closed down a shopping centre and fined its owner Dh5,000 after massive crowds thronged the venue for a discount scheme."
-        }
-        ]
-        // return(
-        //     //{links.map()}
-            
-        // )
-    }
  
     function renderchart(rx){
         return(
@@ -150,13 +159,13 @@ export default function Dashboard() {
                             <Card.Body>
                                 <p onClick={loclist}>Locations</p>
                             </Card.Body>
-                            <Card.Body >
+                            <Card.Body onClick={stats}>
                                 Analytics
                             </Card.Body>
                             <Card.Body >
                                 Devices
                             </Card.Body>
-                            <Card.Body >
+                            <Card.Body onClick={abt}>
                                 About
                             </Card.Body>
                         </Card>
@@ -205,6 +214,24 @@ export default function Dashboard() {
       </div>
         </div>
         <h1 className="QuickLinks">Quick Links</h1>
+        <div className="linkss">{Links.map(function(d){
+                return (
+                <div className="LinkItem" onClick={()=> window.open(d.link, "_blank")}>
+                    <Paper className="linkP" style={{boxShadow:"0px 11px 15px -7px grey",outline:"2px"}}>
+                        <div style={{display:"flex"}}>
+                        <img className="linkImg" src={d.img}/>
+                            <div>
+                            <p className="linktitle">{d.name}</p>
+                            <p className="linkdesc">{d.desc}</p>
+                            </div>
+                            
+                        </div>
+                    </Paper>
+                    
+                </div>
+                    )
+              })}
+              </div>
         
                 </Col>
             </Row>
@@ -216,17 +243,19 @@ export default function Dashboard() {
         History.push({
             pathname: '/loc',
             state: { fn:fname,ln:lname,some: gLocations }
-          })
-        //id.preventDefault()
-        // switch(id){
-        //     case 'L':
-        //         History.push('/loc')
-        //         break;
-        //     default:
-        //         console.log('hi')
+          })}
 
-        // }
+    async function abt() {
+        History.push({
+            pathname: '/abt',
+            state: { fn:fname,ln:lname}
+            })
+        }
+    async function stats() {
+        History.push('/analytics')
     }
-}
+
+    }
+
 
 

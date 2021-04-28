@@ -4,3 +4,51 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: lighter;
 }
+.linkss{
+    width: 90vw;
+    display: inline-flex;
+    flex-wrap: wrap;
+    flex-flow: wrap;
+    padding-left: 3vw;
+    justify-content: center;
+    padding-bottom: 20px;
+    box-shadow:"0px 11px 15px -7px grey";
+    margin: 6px;
+    
+}
+.LinkItem{
+    padding-right: 1.5vw;
+    max-width: 28vw;
+    width: 28vw;
+    max-height: 20vh;
+    height: 20vh;
+    justify-content: center;
+    outline: 2px;
+    
+}
+.linkP{
+    color: brown;
+    box-shadow:"10px 11px 15px -7px grey"
+}
+.linkImg{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    width: 25vh;
+    height: 20vh;
+}
+.linkdesc{
+    color: #999999;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: lighter;
+    font-size: 10.5px;
+    padding-left: 14px;
+    margin-bottom: auto;
+    padding-top: 0px;
+}
+.linktitle{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    padding-left: 8px;
+    padding-bottom: 0px;
+}
