@@ -102,6 +102,19 @@ export default function Dashboard() {
             }).catch(err => console.log(err))
         
     }},[dashData])
+
+    function renderLinks(){
+        var links=[
+            {name:"",
+            link:"https://www.khaleejtimes.com/coronavirus-pandemic/20210306/uae-covid-shopping-centre-shut-fined-as-discount-sale-causes-crowds",
+            desc:"Authorities in Ajman have closed down a shopping centre and fined its owner Dh5,000 after massive crowds thronged the venue for a discount scheme."
+        }
+        ]
+        // return(
+        //     //{links.map()}
+            
+        // )
+    }
  
     function renderchart(rx){
         return(
