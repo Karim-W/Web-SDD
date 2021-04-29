@@ -11,12 +11,15 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Popup from './popupadd'
 import {Link,useHistory} from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext';
 
 export default function LocList(props){
 var Locations = []
 const History = useHistory()
 const L = props.location.state.some;
+const {currentUser} = useAuth()
 
 for (var i =0;i<L.length;i++){
     var found = false;
@@ -90,6 +93,9 @@ const ColoredLine = ({ color }) => (
           <Typography variant="h6"  style={{paddingLeft:"20px",fontFamily:"Segoe UI",fontWeight:"lighter"}}>
             Locations List
           </Typography>
+          <div style={{marginLeft:"auto",paddingTop:"10px"}}>
+            <Popup user={{currentUser}}/>
+        </div>
           <div >
             <List>
             {Locations.map((value) => (

@@ -121,6 +121,11 @@ export default function Analytics() {
                 inst = {'day':d,'violations':v} 
                 rx.push(inst)
             }
+            rx.sort(function(a, b) { 
+                a = new Date(a.day);
+                b = new Date(b.day);
+                return a >b ? -1 : a < b ? 1 : 0;
+               })
             setBusy(false)
             setDashData(rx)
             

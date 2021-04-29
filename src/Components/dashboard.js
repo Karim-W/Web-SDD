@@ -113,6 +113,12 @@ link:"https://www.khaleejtimes.com/uae/dubai/dubai-store-closed-fined-Dh-50,000-
                 inst = {'day':d,'violations':v} 
                 rx.push(inst)
             }
+            rx.sort(function(a, b) { 
+                a = new Date(a.day);
+                b = new Date(b.day);
+                return a >b ? -1 : a < b ? 1 : 0;
+               })
+
             setBusy(false)
             setDashData(rx)
             console.log("dashData.length")
