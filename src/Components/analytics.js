@@ -31,6 +31,7 @@ import {
 import { render } from 'react-dom'
 import SelectInput from '@material-ui/core/Select/SelectInput'
 import { Animation } from '@devexpress/dx-react-chart';
+import { PieChart } from 'react-minimal-pie-chart';
 
 
 
@@ -53,6 +54,7 @@ export default function Analytics() {
 //     var CanvasJSReact = require('./canvasjs.react');
 // var CanvasJS = CanvasJSReact.CanvasJS;
 // var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+    const colors = ["#fd8708","#FD9C35","#FEA648","#FEBA72","#FECE9A","#FED8AE","#FEE1C2","#FEEBD7","#FEF5EB","#FFFFFF"]
     
     useEffect(() => {
         
@@ -107,7 +109,8 @@ export default function Analytics() {
                 count.push(i)
             }
             // console.log(tot)
-            pies.push({name:gLocations[si].name,value:tot})
+
+            pies.push({'title':gLocations[si].name,'value':tot,'color':colors[si%10]})
             }
             setPie(pies)
             var inst
@@ -131,7 +134,7 @@ export default function Analytics() {
         <>
                 <Container style={{marginLeft:"0px",padding:"0px"}}>
             <Row md={4} style={{marginLeft:"0px"}}>
-                <Col style={{maxWidth:"10vw",height:"100vh",backgroundColor:"black",padding:"0px"}}>
+                <Col style={{maxWidth:"10vw",height:"120vh",backgroundColor:"black",padding:"0px"}}>
                     <img src={AppLogoBW} alt="logo"style={{width:"6vw",display:"flex",marginRight:"auto",marginLeft:"auto",paddingBottom:"50px",paddingTop:"50px"}}></img>
                         <Card style={{backgroundColor:"#fd8708",borderRadius:"0px",textAlign:"center",color:"white"}}>
                         <Card.Body >
@@ -194,21 +197,37 @@ export default function Analytics() {
         </Paper>
       </div>
         </div>
-        <Paper style={{width:"90vw"}}>
-        <Chart
-          data={pie}
-        >
-          <PieSeries
-            valueField="value"
-            argumentField="name"
-          />
-          <Title
-            text="Area of Countries"
-          />
-          <Animation />
-        </Chart>
+        <div className="PieCard">
+        <Paper style={{ boxShadow:"0px 11px 15px -7px grey",paddingBottom:"10px"}}>
+            <h1 className="pieTitle">Portion of violations per store</h1>
+            <div className="piChart">
+                <PieChart data={pie}
+                className="pi"
+                // label={(labelRenderProps: LabelRenderProps) =>
+                //     ["1","2"]
+                //   }
+                label={({ dataEntry }) => `${Math.round(dataEntry.percentage)} %`}
+                />
+            </div>
+            <div className="legend">
+            { pie.map(function(d) {
+                return (
+                // <div className="legendItem">
+                <div className="legend">
+                    <div style={{height:"50px",width: "50px",backgroundColor:d.color,borderRadius: "50%"}}> </div>
+                    <p className="legendTitle">{d.title}:{d.value}</p>
+                </div>
+               )
+                    
+              })
+            }
+            </div>
+
+        
       </Paper>
+      </div>
       {/* {options} */}
+      
         
                 </Col>
             </Row>

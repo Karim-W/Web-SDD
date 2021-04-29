@@ -17,6 +17,7 @@ import {
     ValueAxis,
   } from '@devexpress/dx-react-chart-material-ui';
 
+
 export default function Location(props) {
 
 var Locations = []
