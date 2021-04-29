@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Modal from "./modaladd";
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Add';
+import firebase from '../firebase'
 
 import "./styles/popup.css";
 
@@ -30,6 +31,23 @@ class App extends React.Component {
 
   handleSubmit(e) {
     this.setState({ name: this.state.modalInputName });
+    const db = firebase.database().ref().child("Locations")
+    console.log(this.props.user.currentUser.uid)
+    var me = " "
+    var value =" "
+    value = this.state.modalInputName
+    me = this.props.user.currentUser.uid
+    db.child(this.state.modalInputName).once('value').then(function(snap){
+        if(snap.val()!==null){
+            console.log("exsists ay")
+            const fuckthisloudassguy = firebase.database().ref().child("users").child(me).child("pairedLocations").child(value)
+            fuckthisloudassguy.set({
+                'id':value
+            })
+        }else{
+            console.log("really doesnt")
+        }
+    })
     this.modalClose();
   }
 
