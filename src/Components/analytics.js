@@ -10,14 +10,14 @@ import {Link,useHistory} from 'react-router-dom'
 import '@devexpress/dx-react-chart-bootstrap4/dist/dx-react-chart-bootstrap4.css';
 import Paper from '@material-ui/core/Paper';
 import './styles/stats.css'
-import PieChart, {
-    Legend,
-    Export,
-    Series,
-    Label,
-    Font,
-    Connector
-  } from 'devextreme-react/pie-chart';
+// import PieChart, {
+//     Legend,
+//     Export,
+//     Series,
+//     Label,
+//     Font,
+//     Connector
+//   } from 'devextreme-react/pie-chart';
 
 
 import {
@@ -50,9 +50,9 @@ export default function Analytics() {
     const [isBusy, setBusy] = useState(true)
     const isInitialMount = useRef(true);
     const [pie,setPie] = useState([])
-    var CanvasJSReact = require('./canvasjs.react');
-var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+//     var CanvasJSReact = require('./canvasjs.react');
+// var CanvasJS = CanvasJSReact.CanvasJS;
+// var CanvasJSChart = CanvasJSReact.CanvasJSChart;
     
     useEffect(() => {
         
