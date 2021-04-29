@@ -10,15 +10,28 @@ import {Link,useHistory} from 'react-router-dom'
 import '@devexpress/dx-react-chart-bootstrap4/dist/dx-react-chart-bootstrap4.css';
 import Paper from '@material-ui/core/Paper';
 import './styles/stats.css'
+import PieChart, {
+    Legend,
+    Export,
+    Series,
+    Label,
+    Font,
+    Connector
+  } from 'devextreme-react/pie-chart';
+
 
 import {
     Chart,
     BarSeries,
+    PieSeries,
     ArgumentAxis,
     ValueAxis,
+    Title,
   } from '@devexpress/dx-react-chart-material-ui';
 import { render } from 'react-dom'
 import SelectInput from '@material-ui/core/Select/SelectInput'
+import { Animation } from '@devexpress/dx-react-chart';
+
 
 
 export default function Analytics() {
@@ -36,27 +49,10 @@ export default function Analytics() {
     const [load,setLoad] = useState([])
     const [isBusy, setBusy] = useState(true)
     const isInitialMount = useRef(true);
-    var Links =[{name:"UAE Covid: Shopping centre shut, fined as discount sale causes crowds",
-    link:"https://www.khaleejtimes.com/coronavirus-pandemic/20210306/uae-covid-shopping-centre-shut-fined-as-discount-sale-causes-crowds",
-    desc:"Authorities in Ajman have closed down a shopping centre and fined its owner Dh5,000 after massive crowds thronged the venue for a discount scheme.",
-    img:"https://images.khaleejtimes.com/storyimage/KT/20210306/ARTICLE/210309420/AR/0/AR-210309420.jpg&MaxW=780&imageVersion=16by9&NCS_modified=20210319115631"
-},{name:"Dubai Covid-19: Full list of new rules for travel, malls, hospitals",
-desc:"Authorities in Dubai have issued multiple measures to boost Covid-19 safety in the emirate. The new rules range from closing down pubs and bars to ramping up PCR testing for passengers; cracking down on private parties and events...",
-img:"https://images.khaleejtimes.com/storyimage/KT/20210202/ARTICLE/210209851/AR/0/AR-210209851.jpg&MaxW=780&imageVersion=16by9&NCS_modified=20210202082935",
-link:"https://www.khaleejtimes.com/coronavirus-pandemic/dubai-covid-19-full-list-of-new-rules-for-travel-malls-hospitals"},
-{name:"Dubai store closed, fined Dh50,000 for not following Covid-19 norms during discount sale",
-desc:"Dubai Economy emphasised that all stores and outlets as well as their customers must strictly adhere to the precautionary measures.",
-img:"https://images.khaleejtimes.com/storyimage/KT/20200910/ARTICLE/200908845/AR/0/AR-200908845.jpg&MaxW=780&imageVersion=16by9&NCS_modified=20200910194805",
-link:"https://www.khaleejtimes.com/uae/dubai/dubai-store-closed-fined-Dh-50,000-for-not-following-covid-19-norms-during-discount-sale-"},
-{
-    name:"mems"
-},{
-    name:"mems"
-},{
-    name:"mems"
-}
-
-]
+    const [pie,setPie] = useState([])
+    var CanvasJSReact = require('./canvasjs.react');
+var CanvasJS = CanvasJSReact.CanvasJS;
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
     
     useEffect(() => {
         
@@ -94,17 +90,26 @@ link:"https://www.khaleejtimes.com/uae/dubai/dubai-store-closed-fined-Dh-50,000-
                 violations.push(element.violations)
             });
             var strung = JSON.parse(JSON.stringify(violations))
+            console.log("dashData.length")
+            // console.log(strung)
             //var t = strung[]
+            var tot = 0
+            var pies = []
             for(var si =0;si<gLocations.length;si++){//gLocations.length
+                tot =0
             for (var k in strung[si]){
                 days.push(k)
                 var i = 0
                 for(var L in strung[si][k]) {
                     i++
+                    tot++
                 }
                 count.push(i)
             }
+            // console.log(tot)
+            pies.push({name:gLocations[si].name,value:tot})
             }
+            setPie(pies)
             var inst
 
             for (var ind =0;ind<days.length;ind++){
@@ -115,37 +120,13 @@ link:"https://www.khaleejtimes.com/uae/dubai/dubai-store-closed-fined-Dh-50,000-
             }
             setBusy(false)
             setDashData(rx)
-            console.log("dashData.length")
-            console.log(dashData.length)
+            
             if(dashData.length!==0){
             isInitialMount.current = false;
         }
             }).catch(err => console.log(err))
         
     }},[dashData])
-
- 
-    function renderchart(rx){
-        return(
-            <Paper style={{minWidth:"80vw",maxHeight:"40vh",boxShadow:"2px 2px 5px grey"}}>
-          <Chart style={{color:"white"}}
-            data={dashData}
-             title={dashData.toString}color="black"
-            style={{minWidth:"80vw",maxHeight:"40vh"}}
-          >
-              {/* title="Total Violation per day" */}
-            <ArgumentAxis />
-            <ValueAxis />
-
-            <BarSeries
-              valueField="violations"
-              argumentField="day"
-              color="#fd8708"
-            />
-            </Chart>
-        </Paper>
-        )
-    }
     return (
         <>
                 <Container style={{marginLeft:"0px",padding:"0px"}}>
@@ -213,7 +194,21 @@ link:"https://www.khaleejtimes.com/uae/dubai/dubai-store-closed-fined-Dh-50,000-
         </Paper>
       </div>
         </div>
-        
+        <Paper style={{width:"90vw"}}>
+        <Chart
+          data={pie}
+        >
+          <PieSeries
+            valueField="value"
+            argumentField="name"
+          />
+          <Title
+            text="Area of Countries"
+          />
+          <Animation />
+        </Chart>
+      </Paper>
+      {/* {options} */}
         
                 </Col>
             </Row>
