@@ -333,6 +333,29 @@ export default function Analytics() {
   const [isBusy, setBusy] = useState(true);
   const isInitialMount = useRef(true);
   const [pie, setPie] = useState([]);
+  const data = [
+    {
+      violation: 1,
+      date: "12-03-2021, 18:30",
+      area: "Mall of the Emirates",
+      city: "Dubai",
+    },
+  ];
+  const [tableData,settableData] = useState(data)
+  const tempDP = 
+  [{ x: 1, y: 6 },
+  { x: 2, y: 1 },
+  { x: 3, y: 4 },
+  { x: 4, y: 2 },
+  { x: 5, y: 14 },
+  { x: 6, y: 6 },
+  { x: 7, y: 8 },
+  { x: 8, y: 11 },
+  { x: 9, y: 19 },
+  { x: 10, y: 11 },
+  { x: 11, y: 10 },
+  { x: 12, y: 1 },]
+  const [monthDP,setmonthDP] = useState(tempDP)
   //     var CanvasJSReact = require('./canvasjs.react');
   // var CanvasJS = CanvasJSReact.CanvasJS;
   // var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -370,45 +393,29 @@ export default function Analytics() {
       {
         type: "line",
         toolTipContent: "Month {x}: {y}",
-        dataPoints: [
-          { x: 1, y: 6 },
-          { x: 2, y: 1 },
-          { x: 3, y: 4 },
-          { x: 4, y: 2 },
-          { x: 5, y: 14 },
-          { x: 6, y: 6 },
-          { x: 7, y: 8 },
-          { x: 8, y: 11 },
-          { x: 9, y: 19 },
-          { x: 10, y: 11 },
-          { x: 11, y: 10 },
-          { x: 12, y: 1 },
-        ],
+        dataPoints: monthDP,
       },
     ],
   };
   //FOR LINE GRAPH
 
   //FOR TABLE
-  const data = [
-    {
-      violation: 1,
-      date: "12-03-2021, 18:30",
-      area: "Mall of the Emirates",
-      city: "Dubai",
-    },
-  ];
+  
 
   const columns = [
-    { key: "violation", header: "Violation", width: 90 },
-    { key: "date", header: "Time", width: 180 },
+    { key: "date", header: "Date", width: 180 },
+    { key: "time", header: "Time", width: 180 },
+    { key: "loc", header: "Location Name", width: 180 },
     { key: "area", header: "Area", width: 250 },
     { key: "city", header: "City", width: 180 },
+    { key: "img", header: "Image", width: 180 },
+
   ];
   //FOR TABLE
 
   useEffect(() => {
     if (isInitialMount.current) {
+        var monthly=[0,0,0,0,0,0,0,0,0,0,0,0]
       const db = firebase.database().ref().child("users");
       db.child(currentUser.uid)
         .once("value")
@@ -453,12 +460,30 @@ export default function Analytics() {
           });
           var strung = JSON.parse(JSON.stringify(violations));
           console.log("dashData.length");
-          // console.log(strung)
+          console.log(strung)
+          var tableda = []
+          for(var k =0;k<gLocations.length;k++){
+              const Tloc = gLocations[k].name
+              const Tarea = gLocations[k].area
+              const Tcity = gLocations[k].city
+              var lk = strung[k]
+              var t =  JSON.parse(JSON.stringify(strung[k]))
+              for(var s in lk){
+                  for (var ss in lk[s]){
+                      console.log(s)
+                      console.log(ss)
+                console.log(lk[s][ss]['photo']);
+                console.log("t");
+                tableda.push({"date":s,"time":ss,"loc":Tloc,"area":Tarea,"city":Tcity,"img":lk[s][ss]['photo']})
+            }
+              }
+
+          }
+          settableData(tableda)
           //var t = strung[]
           var tot = 0;
           var pies = [];
           for (var si = 0; si < gLocations.length; si++) {
-            //gLocations.length
             tot = 0;
             for (var k in strung[si]) {
               days.push(k);
@@ -491,6 +516,21 @@ export default function Analytics() {
             b = new Date(b.day);
             return a > b ? -1 : a < b ? 1 : 0;
           });
+
+          for(var date in rx){
+              var str = rx[date].day.split("-")
+              var mon = parseInt(str[1])
+              console.log(rx[date])
+              monthly[mon-1] += rx[date].violations
+
+          }
+          console.log(monthly)
+          var newDp =[]
+          for(var i =0;i<12;i++){
+            newDp.push({x:i+1,y:monthly[i]})
+          }
+          setmonthDP(newDp)
+
           setBusy(false);
           setDashData(rx);
 
@@ -786,7 +826,7 @@ export default function Analytics() {
                 <Paper
                   style={{ minWidth: "80vw", boxShadow: "2px 2px 5px grey" }}
                 >
-                  <Table data={data} columns={columns} />
+                  <Table data={tableData} columns={columns} />
                 </Paper>
               </div>
             </div>
