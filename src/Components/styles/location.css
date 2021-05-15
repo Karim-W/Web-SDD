@@ -4,14 +4,16 @@ h5 {
   font-size: 20px;
   padding-left: 2%;
   display: flex;
-  line-height: 80%;
+line-height: 70%;
+
 }
 h4 {
   font-family: Segoe UI;
   font-weight: lighter;
   font-size: 20px;
   padding-left: 2%;
-  line-height: 80%;
+line-height: 70%;
+
 }
 .innerGraph {
   padding-left: 30%;

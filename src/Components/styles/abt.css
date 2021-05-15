@@ -1,0 +1,15 @@
+.Sub{
+    width: 90vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* .Sub : h1{
+    font-size: 9px;
+    color: brown;
+} */
+#sub {
+    padding-top: 12px;
+    font-size: 40px;
+}

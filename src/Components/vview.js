@@ -8,51 +8,71 @@ import {
   Accordion,
   Card,
   Alert,
+  Form,
 } from "react-bootstrap";
 import AppLogoBW from "./Assets/Images/AppLogoBW.jpg";
+import { useHistory } from "react-router-dom";
+// import React from 'react';
+import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
+import CameraIcon from "@material-ui/icons/PhotoCamera";
+// import Card from '@material-ui/core/Card';
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
+import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Popup from "./popupadd";
-import { Link, useHistory } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
-import ConfirmDialog from "./confirm";
+import { makeStyles } from "@material-ui/core/styles";
+// import Container from '@material-ui/core/Container';
+import Link from "@material-ui/core/Link";
+import Amir from "./Assets/Images/Amir.jpg";
+import Raza from "./Assets/Images/Raza.png";
+import "./styles/abt.css";
 import firebase from "../firebase";
 
-export default function LocList(props) {
-  var Locations = [];
+export default function V_View(props) {
   const History = useHistory();
-  const L = props.location.state.some;
-  const { currentUser } = useAuth();
+  const emailRef = useRef();
+  const passRef = useRef();
+  const [imgurl, setimg] = useState();
+  const isInitialMount = useRef(true);
+  const [date, setdate] = useState();
+  const [time, settime] = useState();
+  //   const
 
-  for (var i = 0; i < L.length; i++) {
-    var found = false;
-    for (var k = 0; k < Locations.length; k++) {
-      if (Locations[k].id === L[i].id) {
-        found = true;
-      }
+  useEffect(() => {
+    if (isInitialMount.current) {
+      //   firebase
+      //     .auth()
+      //     .currentUser.updateProfile({ displayName: "Karim Hassan" });
+      var str = props.location.state;
+      var items = str.date.split(" ");
+      setdate(items[0]);
+      settime(items[1]);
+      console.log(props.location.locid);
+      var Lid = String(props.location.locid);
+      const db = firebase
+        .database()
+        .ref()
+        .child("Locations")
+        .child(Lid)
+        .child("violations")
+        .child(items[0])
+        .child(items[1]);
+      db.once("value").then(function (snap) {
+        if (snap.val().photo !== "n/a") {
+          setimg(snap.val().photo);
+        } else {
+          setimg(
+            "https://miro.medium.com/freeze/max/690/1*N-reHLcavd8i2CtB1BuFjg.gif"
+          );
+        }
+        isInitialMount.current = false;
+      });
     }
-    if (!found) {
-      Locations.push(L[i]);
-    }
-  }
-  const ColoredLine = ({ color }) => (
-    <hr
-      style={{
-        color: color,
-        backgroundColor: color,
-        height: 1,
-        padding: "0px",
-      }}
-    />
-  );
+  }, [imgurl]);
 
   return (
     <>
@@ -68,13 +88,14 @@ export default function LocList(props) {
           <Col
             style={{
               maxWidth: "10vw",
-              height: "100vh",
+              height: "110vh",
               backgroundColor: "black",
               padding: "0px",
             }}
           >
             <img
               src={AppLogoBW}
+              href="/"
               alt="logo"
               style={{
                 width: "6vw",
@@ -93,7 +114,9 @@ export default function LocList(props) {
                 color: "white",
               }}
             >
-              <Card.Body onClick={dash}>Dashboard</Card.Body>
+              <Card.Body onClick={() => History.push("/")} href="">
+                Dashboard
+              </Card.Body>
               <Card.Body onClick={stats}>Analytics</Card.Body>
               <Card.Body onClick={abt}>About</Card.Body>
             </Card>
@@ -148,7 +171,7 @@ export default function LocList(props) {
                     marginLeft: "auto",
                   }}
                 >
-                  Locations
+                  Violation View
                 </h1>
 
                 <Dropdown
@@ -169,7 +192,7 @@ export default function LocList(props) {
                       fontWeight: "lighter",
                     }}
                   >
-                    {props.location.state.fn} {props.location.state.ln}{" "}
+                    {firebase.auth().currentUser.displayName}
                     <Spinner animation="grow" variant="success" size="sm" />
                   </Dropdown.Toggle>
 
@@ -201,121 +224,27 @@ export default function LocList(props) {
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                marginLeft: "auto",
-                marginRight: "auto",
-                paddingLeft: "0%",
-                paddingRight: "0%",
-                paddingTop: "20px",
-                minWidth: "80vw",
-                fontFamily: "Segoe UI",
-                fontWeight: "lighter",
-              }}
-            >
-              <Grid item xs={12} md={6} style={{ minWidth: "90vw" }}>
-                <div style={{ display: "flex" }}>
-                  <Typography
-                    variant="h6"
-                    style={{
-                      paddingLeft: "20px",
-                      fontFamily: "Segoe UI",
-                      fontWeight: "lighter",
-                    }}
-                  >
-                    Locations List
-                  </Typography>
-                  <div
-                    style={{
-                      marginLeft: "auto",
-                      paddingTop: "10px",
-                      paddingRight: "20px",
-                    }}
-                  >
-                    <Popup user={{ currentUser }} />
-                  </div>
+              <div style={{ display: "inline-block", paddingTop: "10vh" }}>
+                <img
+                  src={imgurl}
+                  style={{
+                    maxWidth: "70vw",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                />
+                <div style={{ fontSize: "20px", paddingTop: "20px" }}>
+                  <h4>Date: {date}</h4>
+                  <h4>Time: {time}</h4>
                 </div>
-                <div>
-                  <List>
-                    {Locations.map((value) => (
-                      <ListItem key={value.id}>
-                        <ListItemAvatar>
-                          <Avatar style={{ width: "60px", height: "60px" }}>
-                            <img
-                              src={value.locImg}
-                              style={{ width: "100px" }}
-                            />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          onClick={() => loc(value)}
-                          primary={value.name}
-                          secondary={
-                            <p>
-                              Violations: {value.activeViolations}, Last
-                              updated: {value.LastUpdated}, Area: {value.area},
-                              City: {value.city}
-                            </p>
-                          }
-                          style={{ width: "60px", paddingLeft: "20px" }}
-                        />
-
-                        <ListItemSecondaryAction>
-                          <IconButton
-                            onClick={() => delet(value.id)}
-                            edge="end"
-                            aria-label="delete"
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </ListItemSecondaryAction>
-                      </ListItem>
-                    ))}
-                  </List>
-                </div>
-              </Grid>
-            </div>
-            <div>
-              <IconButton aria-label="delete">
-                <DeleteIcon />
-              </IconButton>
-              <ConfirmDialog
-                title="Delete Post?"
-                // open={}
-                setOpen={false}
-                // onConfirm={}
-              >
-                Are you sure you want to delete this post?
-              </ConfirmDialog>
+              </div>
             </div>
           </Col>
         </Row>
       </div>
     </>
   );
-  async function delet(Lid) {
-    var id = String(currentUser.uid);
-    const db = firebase
-      .database()
-      .ref()
-      .child("users")
-      .child(id)
-      .child("pairedLocations");
-    console.log(currentUser);
-    db.child(Lid).remove();
-  }
-  async function loc(v) {
-    History.push({
-      pathname: "/manageloc",
-      state: {
-        fn: props.location.state.fn,
-        ln: props.location.state.ln,
-        some: v,
-      },
-    });
-  }
+
   async function abt() {
     History.push({
       pathname: "/abt",
@@ -327,7 +256,5 @@ export default function LocList(props) {
   }
 }
 async function dash() {
-  History.push({
-    pathname: "/",
-  });
+  // History.push('/')
 }
