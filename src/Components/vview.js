@@ -206,7 +206,7 @@ export default function V_View(props) {
                         fontFamily: "Segoe UI",
                         fontWeight: "lighter",
                       }}
-                      href="#/action-1"
+                      onClick={() => History.push("/settings")}
                     >
                       Settings
                     </Dropdown.Item>

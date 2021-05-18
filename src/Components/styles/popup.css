@@ -10,6 +10,26 @@
   width: 60%;
   background: #ffffff;
   left: 25%;
-  top: 30%;
+top: 15%;
+
   padding: 20px;
+  border-radius: 25px;
+  box-shadow: 2px 2px 5px grey;
+}
+
+.modalButt {
+  border-radius: 25px;
+  margin-top: auto;
+  margin-bottom: auto;
+  background-color: #fd8708;
+  border: 2;
+  border-color: orange;
+  color: #ffffff;
+  box-shadow: 2px 2px 5px grey;
+}
+button:hover {
+  transform: scale(0.9);
+}
+label{
+  padding-right: 10%;
 }

@@ -555,7 +555,7 @@ export default function Analytics() {
           <Col
             style={{
               maxWidth: "10vw",
-              height: "120vh",
+              height: "160vh",
               backgroundColor: "black",
               padding: "0px",
             }}
@@ -580,12 +580,10 @@ export default function Analytics() {
                 color: "white",
               }}
             >
-              <Card.Body>Anaytics</Card.Body>
-              <Card.Body>
-                <p onClick={loclist}>Locations</p>
+              <Card.Body onClick={() => History.push("/dashboard")}>
+                Dashboard
               </Card.Body>
               <Card.Body onClick={stats}>Analytics</Card.Body>
-              <Card.Body>Devices</Card.Body>
               <Card.Body onClick={abt}>About</Card.Body>
             </Card>
 
@@ -668,13 +666,13 @@ export default function Analytics() {
                     style={{ backgroundColor: "black", color: "#fd8708" }}
                   >
                     <Dropdown.Item
+                      onClick={() => History.push("/settings")}
                       style={{
                         backgroundColor: "black",
                         color: "white",
                         fontFamily: "Segoe UI",
                         fontWeight: "lighter",
                       }}
-                      href="#/action-1"
                     >
                       Settings
                     </Dropdown.Item>

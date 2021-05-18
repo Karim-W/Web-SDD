@@ -56,12 +56,6 @@ export default function Location(props) {
       Locations.push(L[i]);
     }
   }
-  // for(var k=0;k<theLocation.violations.length;k++){
-  //             for(var i in theLocation.violations[i]){
-  //                 console.log(i)
-  //                 SetTot(Tot+1)
-  //             }
-  //         }
   useEffect(() => {
     for (var k = 0; k < theLocation.violations.length; k++) {
       for (var i in theLocation.violations[i]) {
@@ -97,7 +91,7 @@ export default function Location(props) {
 
   return (
     <>
-     <div
+      <div
         style={{
           marginLeft: "0px",
           padding: "0px",
@@ -134,13 +128,11 @@ export default function Location(props) {
                 color: "white",
               }}
             >
-              <Card.Body onClick={dash}>Dashboard</Card.Body>
-              <Card.Body>
-                <p>Locations</p>
+              <Card.Body onClick={() => History.push("/dashboard")}>
+                Dashboard
               </Card.Body>
-              <Card.Body>Analytics</Card.Body>
-              <Card.Body>Devices</Card.Body>
-              <Card.Body>About</Card.Body>
+              <Card.Body onClick={stats}>Analytics</Card.Body>
+              <Card.Body onclick={()      =>      History.push("/abt")}>About</Card.Body>
             </Card>
 
             <p
@@ -228,7 +220,7 @@ export default function Location(props) {
                         fontFamily: "Segoe UI",
                         fontWeight: "lighter",
                       }}
-                      href="#/action-1"
+                      onClick={() => History.push("/settings")}
                     >
                       Settings
                     </Dropdown.Item>
@@ -286,6 +278,7 @@ export default function Location(props) {
                     paddingLeft: "1vw",
                     paddingRight: "2.5vw",
                     boxShadow: "0px 11px 15px -7px grey",
+                    position:"absolute"
                   }}
                 >
                   <div style={{ display: "flex" }}>
@@ -296,7 +289,7 @@ export default function Location(props) {
             <EditIcon/>
         </IconButton> */}
                     <div style={{ marginLeft: "auto", paddingTop: "10px" }}>
-                      <Popup />
+                      <Popup ll={theLocation}/>
                     </div>
                   </div>
                   <h5>
@@ -396,7 +389,7 @@ export default function Location(props) {
                 <EnhancedTable
                   style={{ paddingLeft: "10px" }}
                   vs={theLocation.violations}
-                  tr = {theLocation.id}
+                  tr={theLocation.id}
                 />
               </div>
               <div
@@ -434,4 +427,14 @@ export default function Location(props) {
       pathname: "/",
     });
   }
+
+  async function stats() {
+    History.push("/analytics");
+  }
 }
+async function dash() {
+  History.push({
+    pathname: "/",
+  });
+}
+

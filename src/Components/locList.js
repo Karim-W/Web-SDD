@@ -26,23 +26,51 @@ import { useAuth } from "../contexts/AuthContext";
 import ConfirmDialog from "./confirm";
 import firebase from "../firebase";
 
+
 export default function LocList(props) {
   var Locations = [];
   const History = useHistory();
   const L = props.location.state.some;
   const { currentUser } = useAuth();
+  const isInitialMount = useRef(true);
+  const [locIDs, setLocIDs] = useState([]);
+  const [gLocations, setGLocations] = useState([]);
+  useEffect(() => {
+    if (isInitialMount.current) {
+      const db = firebase.database().ref().child("users");
+      db.child(currentUser.uid)
+        .once("value")
+        .then(function (snap) {
+          var iDs = [];
+          var data = snap.val();
+          var parent = Object.values(data.pairedLocations);
+          for (var i = 0; i < parent.length; i++) {
+            if (locIDs.indexOf(parent[i].id) == -1) {
+              setLocIDs((locIDs) => [...locIDs, parent[i].id]);
+              iDs.push(parent[i].id);
+            }
+          }
+          var Ns = [];
+          for (var t = 0; t < iDs.length; t++) {
+            const dbt = firebase.database().ref().child("Locations");
+            dbt
+              .child(iDs[t])
+              .once("value")
+              .then(function (sap) {
+                var instLocation = sap.val();
+                // if(Ns.length<=iDs.length){
+                if (gLocations.indexOf(instLocation) === -1) {
+                  setGLocations((gLocations) => [...gLocations, instLocation]);
+                  Ns.push(instLocation.name);
+                }
+              })
+              .catch((err2) => console.log(err2));
+          }})
+          isInitialMount.current=false
+        }
+      },[gLocations])
 
-  for (var i = 0; i < L.length; i++) {
-    var found = false;
-    for (var k = 0; k < Locations.length; k++) {
-      if (Locations[k].id === L[i].id) {
-        found = true;
-      }
-    }
-    if (!found) {
-      Locations.push(L[i]);
-    }
-  }
+  
   const ColoredLine = ({ color }) => (
     <hr
       style={{
@@ -93,9 +121,9 @@ export default function LocList(props) {
                 color: "white",
               }}
             >
-              <Card.Body onClick={dash}>Dashboard</Card.Body>
+              <Card.Body>Dashboard</Card.Body>
               <Card.Body onClick={stats}>Analytics</Card.Body>
-              <Card.Body onClick={abt}>About</Card.Body>
+              <Card.Body>About</Card.Body>
             </Card>
 
             <p
@@ -169,7 +197,7 @@ export default function LocList(props) {
                       fontWeight: "lighter",
                     }}
                   >
-                    {props.location.state.fn} {props.location.state.ln}{" "}
+                    {firebase.auth().currentUser.displayName}{" "}
                     <Spinner animation="grow" variant="success" size="sm" />
                   </Dropdown.Toggle>
 
@@ -177,13 +205,13 @@ export default function LocList(props) {
                     style={{ backgroundColor: "black", color: "#fd8708" }}
                   >
                     <Dropdown.Item
+                      onClick={() => History.push("/settings")}
                       style={{
                         backgroundColor: "black",
                         color: "white",
                         fontFamily: "Segoe UI",
                         fontWeight: "lighter",
                       }}
-                      href="#/action-1"
                     >
                       Settings
                     </Dropdown.Item>
@@ -234,12 +262,14 @@ export default function LocList(props) {
                       paddingRight: "20px",
                     }}
                   >
-                    <Popup user={{ currentUser }} />
+                    <Popup
+                      user={{ currentUser }}
+                    />
                   </div>
                 </div>
                 <div>
                   <List>
-                    {Locations.map((value) => (
+                    {gLocations.map((value) => (
                       <ListItem key={value.id}>
                         <ListItemAvatar>
                           <Avatar style={{ width: "60px", height: "60px" }}>
@@ -262,8 +292,11 @@ export default function LocList(props) {
                           style={{ width: "60px", paddingLeft: "20px" }}
                         />
 
-                        <ListItemSecondaryAction>
+                        <ListItemSecondaryAction
+                          style={{ paddingRight: "40px" }}
+                        >
                           <IconButton
+                          className="modalButt"
                             onClick={() => delet(value.id)}
                             edge="end"
                             aria-label="delete"
@@ -277,25 +310,14 @@ export default function LocList(props) {
                 </div>
               </Grid>
             </div>
-            <div>
-              <IconButton aria-label="delete">
-                <DeleteIcon />
-              </IconButton>
-              <ConfirmDialog
-                title="Delete Post?"
-                // open={}
-                setOpen={false}
-                // onConfirm={}
-              >
-                Are you sure you want to delete this post?
-              </ConfirmDialog>
-            </div>
+            <div></div>
           </Col>
         </Row>
       </div>
     </>
   );
   async function delet(Lid) {
+    if(window.confirm('Are you sure you wish to delete this item?')){
     var id = String(currentUser.uid);
     const db = firebase
       .database()
@@ -305,7 +327,10 @@ export default function LocList(props) {
       .child("pairedLocations");
     console.log(currentUser);
     db.child(Lid).remove();
+    window.location.reload(true);
   }
+  }
+  
   async function loc(v) {
     History.push({
       pathname: "/manageloc",
@@ -316,12 +341,12 @@ export default function LocList(props) {
       },
     });
   }
-  async function abt() {
-    History.push({
-      pathname: "/abt",
-      state: { fn: props.location.state.fn, ln: props.location.state.ln },
-    });
-  }
+  // async function abt() {
+  //   History.push({
+  //     pathname: "/abt",
+  //     state: { fn: props.location.state.fn, ln: props.location.state.ln },
+  //   });
+  // }
   async function stats() {
     History.push("/analytics");
   }
